@@ -2,6 +2,8 @@ import { Navbar } from "@/components/landing/Navbar";
 import { Hero } from "@/components/landing/Hero";
 import { Features } from "@/components/landing/Features";
 import { HowItWorks } from "@/components/landing/HowItWorks";
+import { CompatibilityChecker } from "@/components/landing/CompatibilityChecker";
+import { Testimonials } from "@/components/landing/Testimonials";
 import { Pricing } from "@/components/landing/Pricing";
 import { Footer } from "@/components/landing/Footer";
 
@@ -16,6 +18,8 @@ const Index = () => {
       <div id="how">
         <HowItWorks />
       </div>
+      <CompatibilityChecker />
+      <Testimonials />
       <div id="pricing">
         <Pricing />
       </div>
