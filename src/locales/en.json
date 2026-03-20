@@ -295,6 +295,34 @@
       "myReport": "My report",
       "myReportDesc": "Personalized 6-page PDF — zodiac, numerology, tarot, rune",
       "referral": "Invite a friend — get 7 free days"
+    },
+    "onboarding": {
+      "title": "Welcome!",
+      "subtitle": "Personalize your readings in 3 steps",
+      "nameLabel": "What's your name?",
+      "namePlaceholder": "Enter your name...",
+      "birthLabel": "Date of birth",
+      "birthPlaceholder": "Pick a date...",
+      "genderLabel": "Your gender",
+      "next": "Next",
+      "finish": "Start the journey",
+      "yourCard": "Your card of the day",
+      "startJourney": "Let's go!",
+      "bannerTitle": "Fill out your profile for personalized readings",
+      "bannerDesc": "Name, birth date and gender — for accurate calculations",
+      "bannerButton": "Fill in",
+      "cards": {
+        "theMagician": "The Magician",
+        "magicianMeaning": "Beginning of a new path, creative power. You can turn any plan into reality.",
+        "highPriestess": "The High Priestess",
+        "priestessMeaning": "Intuition and hidden knowledge. Listen to your inner voice.",
+        "theEmpress": "The Empress",
+        "empressMeaning": "Abundance and creativity. Time to take care of yourself and loved ones.",
+        "theStar": "The Star",
+        "starMeaning": "Hope and inspiration. The universe supports your dreams.",
+        "theWorld": "The World",
+        "worldMeaning": "Completion of a cycle, harmony. Everything falls into place."
+      }
     }
   }
 }

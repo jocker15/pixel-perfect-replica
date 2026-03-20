@@ -5,11 +5,13 @@ import { Button } from "@/components/ui/button";
 import { LogOut, Trash2, CreditCard, FileText, Copy, Check, QrCode } from "lucide-react";
 import { LanguageSwitcher } from "@/components/landing/LanguageSwitcher";
 import { Link } from "react-router-dom";
+import { useUserProfile } from "@/contexts/UserProfileContext";
 
 export default function ProfilePage() {
   const { t } = useTranslation();
-  const [name, setName] = useState(t("app.defaultName"));
-  const [gender, setGender] = useState<"male" | "female" | "other">("male");
+  const { profile, setProfile } = useUserProfile();
+  const [name, setName] = useState(profile.onboarded ? profile.name : t("app.defaultName"));
+  const [gender, setGender] = useState<"male" | "female" | "other">(profile.gender || "male");
   const [copied, setCopied] = useState(false);
   const [showQr, setShowQr] = useState(false);
 
