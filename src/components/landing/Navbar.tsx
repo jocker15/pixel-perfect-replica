@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Sparkles, Menu, X } from "lucide-react";
 import { LanguageSwitcher } from "./LanguageSwitcher";
@@ -8,6 +9,7 @@ import { LanguageSwitcher } from "./LanguageSwitcher";
 export const Navbar = () => {
   const [open, setOpen] = useState(false);
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   const links = [
     { label: t("nav.modules"), href: "#features" },
@@ -30,7 +32,7 @@ export const Navbar = () => {
             </a>
           ))}
           <LanguageSwitcher />
-          <Button variant="hero" size="sm">{t("nav.start")}</Button>
+          <Button variant="hero" size="sm" onClick={() => navigate("/login")}>{t("nav.start")}</Button>
         </div>
 
         <div className="flex md:hidden items-center gap-2">
