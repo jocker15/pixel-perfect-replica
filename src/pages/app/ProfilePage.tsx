@@ -165,7 +165,7 @@ export default function ProfilePage() {
           <Trash2 className="w-5 h-5" />
           {t("app.profilePage.deleteData")}
         </Button>
-        <Button variant="ghost" size="lg" className="w-full justify-start gap-3 text-muted-foreground">
+        <Button variant="ghost" size="lg" className="w-full justify-start gap-3 text-muted-foreground" onClick={() => { logout(); navigate("/login"); }}>
           <LogOut className="w-5 h-5" />
           {t("app.profilePage.logout")}
         </Button>

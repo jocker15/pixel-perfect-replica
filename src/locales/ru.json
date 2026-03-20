@@ -324,5 +324,23 @@
         "worldMeaning": "Завершение цикла, гармония. Всё встаёт на свои места."
       }
     }
+  },
+  "auth": {
+    "loginSubtitle": "Войди, чтобы открыть персональные предсказания",
+    "registerSubtitle": "Создай аккаунт для персональных предсказаний",
+    "telegramLogin": "Войти через Telegram",
+    "or": "или",
+    "password": "Пароль",
+    "confirmPassword": "Подтвердите пароль",
+    "login": "Войти",
+    "register": "Регистрация",
+    "createAccount": "Создать аккаунт",
+    "noAccount": "Нет аккаунта?",
+    "haveAccount": "Уже есть аккаунт?",
+    "invalidCredentials": "Неверный email или пароль",
+    "networkError": "Ошибка сети. Попробуйте позже",
+    "telegramError": "Ошибка входа через Telegram",
+    "passwordsMismatch": "Пароли не совпадают",
+    "registerError": "Ошибка регистрации"
   }
 }
