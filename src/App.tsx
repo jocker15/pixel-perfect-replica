@@ -3,9 +3,13 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { AuthProvider } from "@/contexts/AuthContext";
 import { UserProfileProvider } from "@/contexts/UserProfileContext";
+import PrivateRoute from "@/components/app/PrivateRoute";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
 import AppLayout from "./components/app/AppLayout";
 import AppDashboard from "./pages/app/AppDashboard";
 import TarotPage from "./pages/app/TarotPage";
@@ -31,6 +35,7 @@ const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
+    <AuthProvider>
     <UserProfileProvider>
     <TooltipProvider>
       <Toaster />
@@ -38,32 +43,37 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
-          <Route path="/app" element={<AppLayout />}>
-            <Route index element={<AppDashboard />} />
-            <Route path="modules" element={<ModulesPage />} />
-            <Route path="vision" element={<VisionPage />} />
-            <Route path="tarot" element={<TarotPage />} />
-            <Route path="dream" element={<DreamPage />} />
-            <Route path="numerology" element={<NumerologyPage />} />
-            <Route path="astro" element={<AstroPage />} />
-            <Route path="compat" element={<CompatPage />} />
-            <Route path="runes" element={<RunesPage />} />
-            <Route path="iching" element={<IChingPage />} />
-            <Route path="coffee" element={<CoffeePage />} />
-            <Route path="stones" element={<StonesPage />} />
-            <Route path="palm" element={<PalmPage />} />
-            <Route path="aura" element={<AuraPage />} />
-            <Route path="face" element={<FacePage />} />
-            <Route path="fengshui" element={<FengShuiPage />} />
-            <Route path="report" element={<ReportPage />} />
-            <Route path="history" element={<HistoryPage />} />
-            <Route path="profile" element={<ProfilePage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route element={<PrivateRoute />}>
+            <Route path="/app" element={<AppLayout />}>
+              <Route index element={<AppDashboard />} />
+              <Route path="modules" element={<ModulesPage />} />
+              <Route path="vision" element={<VisionPage />} />
+              <Route path="tarot" element={<TarotPage />} />
+              <Route path="dream" element={<DreamPage />} />
+              <Route path="numerology" element={<NumerologyPage />} />
+              <Route path="astro" element={<AstroPage />} />
+              <Route path="compat" element={<CompatPage />} />
+              <Route path="runes" element={<RunesPage />} />
+              <Route path="iching" element={<IChingPage />} />
+              <Route path="coffee" element={<CoffeePage />} />
+              <Route path="stones" element={<StonesPage />} />
+              <Route path="palm" element={<PalmPage />} />
+              <Route path="aura" element={<AuraPage />} />
+              <Route path="face" element={<FacePage />} />
+              <Route path="fengshui" element={<FengShuiPage />} />
+              <Route path="report" element={<ReportPage />} />
+              <Route path="history" element={<HistoryPage />} />
+              <Route path="profile" element={<ProfilePage />} />
+            </Route>
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>
     </UserProfileProvider>
+    </AuthProvider>
   </QueryClientProvider>
 );
 

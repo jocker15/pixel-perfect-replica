@@ -168,9 +168,12 @@ export async function authRegister(email: string, password: string) {
 // --- User data ---
 
 export async function getUserProfile() {
-  return fetch(`${API_URL}/api/user/profile`).then((r) => r.json());
+  return fetch(`${API_URL}/api/user/profile`, { headers: getAuthHeaders() }).then((r) => {
+    if (r.status === 401) throw new Error("Unauthorized");
+    return r.json();
+  });
 }
 
 export async function getHistory() {
-  return fetch(`${API_URL}/api/history`).then((r) => r.json());
+  return fetch(`${API_URL}/api/history`, { headers: getAuthHeaders() }).then((r) => r.json());
 }
