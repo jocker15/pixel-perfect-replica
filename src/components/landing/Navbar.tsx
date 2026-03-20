@@ -9,6 +9,7 @@ import { LanguageSwitcher } from "./LanguageSwitcher";
 export const Navbar = () => {
   const [open, setOpen] = useState(false);
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   const links = [
     { label: t("nav.modules"), href: "#features" },
