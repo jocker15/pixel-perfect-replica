@@ -7,21 +7,20 @@ const zodiacSymbols = [
 ];
 
 const planetSymbols = [
-  { symbol: "☉", orbit: 0.32, angle: 15, size: 16 },
-  { symbol: "☽", orbit: 0.26, angle: 75, size: 14 },
-  { symbol: "♂", orbit: 0.40, angle: 140, size: 13 },
-  { symbol: "♀", orbit: 0.20, angle: 210, size: 13 },
-  { symbol: "♃", orbit: 0.46, angle: 270, size: 15 },
-  { symbol: "♄", orbit: 0.38, angle: 320, size: 14 },
-  { symbol: "☿", orbit: 0.16, angle: 50, size: 12 },
-  { symbol: "♆", orbit: 0.44, angle: 185, size: 12 },
+  { symbol: "☉", orbit: 0.32, angle: 15, size: 18 },
+  { symbol: "☽", orbit: 0.26, angle: 75, size: 16 },
+  { symbol: "♂", orbit: 0.40, angle: 140, size: 15 },
+  { symbol: "♀", orbit: 0.20, angle: 210, size: 15 },
+  { symbol: "♃", orbit: 0.46, angle: 270, size: 17 },
+  { symbol: "♄", orbit: 0.38, angle: 320, size: 16 },
+  { symbol: "☿", orbit: 0.16, angle: 50, size: 14 },
+  { symbol: "♆", orbit: 0.44, angle: 185, size: 14 },
 ];
 
 export const ZodiacWheel = () => {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll();
 
-  // Parallax: wheel drifts up slower than scroll
   const y = useTransform(scrollYProgress, [0, 1], ["0vh", "-40vh"]);
   const outerRotate = useTransform(scrollYProgress, [0, 1], [0, 60]);
   const innerRotate = useTransform(scrollYProgress, [0, 1], [0, -40]);
@@ -41,14 +40,22 @@ export const ZodiacWheel = () => {
           width={size}
           height={size}
           viewBox={`0 0 ${size} ${size}`}
-          className="w-[90vmin] h-[90vmin] max-w-[800px] max-h-[800px] opacity-100"
+          className="w-[90vmin] h-[90vmin] max-w-[800px] max-h-[800px]"
         >
           <defs>
             <radialGradient id="wg" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stopColor="hsl(27 89% 52%)" stopOpacity="0.04" />
-              <stop offset="60%" stopColor="hsl(27 89% 52%)" stopOpacity="0.015" />
+              <stop offset="0%" stopColor="hsl(27 89% 52%)" stopOpacity="0.12" />
+              <stop offset="40%" stopColor="hsl(27 89% 52%)" stopOpacity="0.06" />
+              <stop offset="80%" stopColor="hsl(27 89% 52%)" stopOpacity="0.02" />
               <stop offset="100%" stopColor="hsl(27 89% 52%)" stopOpacity="0" />
             </radialGradient>
+            <filter id="glow">
+              <feGaussianBlur stdDeviation="2" result="blur" />
+              <feMerge>
+                <feMergeNode in="blur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
           </defs>
 
           <circle cx={cx} cy={cy} r={cx * 0.96} fill="url(#wg)" />
@@ -63,8 +70,8 @@ export const ZodiacWheel = () => {
                 cx={cx} cy={cy} r={cx * r}
                 fill="none"
                 stroke="hsl(27 89% 52%)"
-                strokeOpacity={i < 2 ? 0.1 : 0.05}
-                strokeWidth={i === 0 ? 1.2 : i === 1 ? 0.8 : 0.5}
+                strokeOpacity={i < 2 ? 0.3 : 0.15}
+                strokeWidth={i === 0 ? 1.5 : i === 1 ? 1 : 0.6}
               />
             ))}
 
@@ -79,8 +86,8 @@ export const ZodiacWheel = () => {
                   x2={cx + Math.cos(a) * cx * 0.95}
                   y2={cy + Math.sin(a) * cx * 0.95}
                   stroke="hsl(27 89% 52%)"
-                  strokeOpacity={0.07}
-                  strokeWidth={0.5}
+                  strokeOpacity={0.2}
+                  strokeWidth={0.7}
                 />
               );
             })}
@@ -97,8 +104,8 @@ export const ZodiacWheel = () => {
                   x2={cx + Math.cos(a) * cx * 0.95}
                   y2={cy + Math.sin(a) * cx * 0.95}
                   stroke="hsl(27 89% 52%)"
-                  strokeOpacity={major ? 0.12 : 0.05}
-                  strokeWidth={major ? 0.7 : 0.4}
+                  strokeOpacity={major ? 0.35 : 0.15}
+                  strokeWidth={major ? 0.8 : 0.5}
                 />
               );
             })}
@@ -115,9 +122,10 @@ export const ZodiacWheel = () => {
                   textAnchor="middle"
                   dominantBaseline="central"
                   fill="hsl(27 89% 52%)"
-                  fillOpacity={0.18}
-                  fontSize={22}
+                  fillOpacity={0.5}
+                  fontSize={26}
                   fontFamily="serif"
+                  filter="url(#glow)"
                 >
                   {s}
                 </text>
@@ -136,8 +144,8 @@ export const ZodiacWheel = () => {
                   textAnchor="middle"
                   dominantBaseline="central"
                   fill="hsl(27 89% 52%)"
-                  fillOpacity={0.08}
-                  fontSize={14}
+                  fillOpacity={0.25}
+                  fontSize={16}
                   fontFamily="serif"
                 >
                   {s}
@@ -160,15 +168,15 @@ export const ZodiacWheel = () => {
                   x2={cx - Math.cos(a) * r}
                   y2={cy - Math.sin(a) * r}
                   stroke="hsl(27 89% 52%)"
-                  strokeOpacity={0.08}
-                  strokeWidth={0.5}
+                  strokeOpacity={0.25}
+                  strokeWidth={0.6}
                 />
               );
             })}
 
             {/* Center ornament */}
-            <circle cx={cx} cy={cy} r={4} fill="none" stroke="hsl(27 89% 52%)" strokeOpacity={0.15} strokeWidth={0.8} />
-            <circle cx={cx} cy={cy} r={1.5} fill="hsl(27 89% 52%)" fillOpacity={0.25} />
+            <circle cx={cx} cy={cy} r={6} fill="none" stroke="hsl(27 89% 52%)" strokeOpacity={0.4} strokeWidth={1} filter="url(#glow)" />
+            <circle cx={cx} cy={cy} r={2.5} fill="hsl(27 89% 52%)" fillOpacity={0.6} filter="url(#glow)" />
           </motion.g>
 
           {/* === PLANET GROUP: separate rotation speed === */}
@@ -180,22 +188,22 @@ export const ZodiacWheel = () => {
               const py = cy + Math.sin(a) * r;
               return (
                 <g key={i}>
-                  {/* Small circle around planet */}
                   <circle
                     cx={px} cy={py} r={p.size * 0.9}
                     fill="none"
                     stroke="hsl(27 89% 52%)"
-                    strokeOpacity={0.06}
-                    strokeWidth={0.4}
+                    strokeOpacity={0.18}
+                    strokeWidth={0.5}
                   />
                   <text
                     x={px} y={py}
                     textAnchor="middle"
                     dominantBaseline="central"
                     fill="hsl(27 89% 52%)"
-                    fillOpacity={0.22}
+                    fillOpacity={0.55}
                     fontSize={p.size}
                     fontFamily="serif"
+                    filter="url(#glow)"
                   >
                     {p.symbol}
                   </text>
