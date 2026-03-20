@@ -1,28 +1,16 @@
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import { MessageSquare, Brain, Sparkles } from "lucide-react";
 
-const steps = [
-  {
-    icon: MessageSquare,
-    title: "Задай вопрос",
-    desc: "Текстом или голосом — бот понимает любые формулировки",
-    num: "01",
-  },
-  {
-    icon: Brain,
-    title: "AI анализирует",
-    desc: "База знаний 20 000+ трактовок и мистических систем",
-    num: "02",
-  },
-  {
-    icon: Sparkles,
-    title: "Получи ответ",
-    desc: "Персональное мистическое толкование в деталях",
-    num: "03",
-  },
-];
-
 export const HowItWorks = () => {
+  const { t } = useTranslation();
+
+  const steps = [
+    { icon: MessageSquare, title: t("howItWorks.step1"), desc: t("howItWorks.step1Desc"), num: "01" },
+    { icon: Brain, title: t("howItWorks.step2"), desc: t("howItWorks.step2Desc"), num: "02" },
+    { icon: Sparkles, title: t("howItWorks.step3"), desc: t("howItWorks.step3Desc"), num: "03" },
+  ];
+
   return (
     <section className="relative py-24 lg:py-32">
       <div className="container">
@@ -33,8 +21,8 @@ export const HowItWorks = () => {
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           className="text-center mb-16"
         >
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4">Как это работает</h2>
-          <p className="text-muted-foreground text-lg">Три простых шага к мистическому знанию</p>
+          <h2 className="text-3xl sm:text-4xl font-bold mb-4">{t("howItWorks.title")}</h2>
+          <p className="text-muted-foreground text-lg">{t("howItWorks.subtitle")}</p>
         </motion.div>
 
         <div className="grid md:grid-cols-3 gap-8 lg:gap-12">
@@ -51,12 +39,10 @@ export const HowItWorks = () => {
                 <step.icon className="w-7 h-7 text-primary" />
               </div>
               <span className="block text-xs font-mono text-primary tracking-widest uppercase">
-                Шаг {step.num}
+                {t("howItWorks.step")} {step.num}
               </span>
               <h3 className="text-xl font-semibold font-serif">{step.title}</h3>
-              <p className="text-muted-foreground text-sm leading-relaxed max-w-xs mx-auto">
-                {step.desc}
-              </p>
+              <p className="text-muted-foreground text-sm leading-relaxed max-w-xs mx-auto">{step.desc}</p>
             </motion.div>
           ))}
         </div>

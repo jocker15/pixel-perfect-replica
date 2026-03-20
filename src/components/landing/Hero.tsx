@@ -1,50 +1,70 @@
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Sparkles } from "./Sparkles";
 import { Send, Sparkles as SparklesIcon } from "lucide-react";
 import heroPhone from "@/assets/hero-phone.png";
+import heroCrystal from "@/assets/hero-crystal.png";
 
 export const Hero = () => {
+  const { t } = useTranslation();
+
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden">
       <Sparkles count={40} />
-      {/* Orange glow */}
       <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/8 rounded-full blur-[120px] pointer-events-none" />
 
-      <div className="container relative z-10 grid lg:grid-cols-2 gap-12 lg:gap-16 items-center py-24 lg:py-0">
-        {/* Left */}
+      <div className="container relative z-10 grid grid-cols-1 lg:grid-cols-[1fr_auto_1fr] gap-8 lg:gap-6 items-center py-24 lg:py-0">
+        {/* Left — crystal ball */}
+        <motion.div
+          initial={{ opacity: 0, x: -40, filter: "blur(6px)" }}
+          animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+          transition={{ duration: 0.9, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+          className="hidden lg:flex justify-center"
+        >
+          <div className="relative">
+            <div className="absolute inset-0 bg-primary/10 rounded-full blur-[60px] scale-90 animate-[glow-pulse_4s_ease-in-out_infinite]" />
+            <img
+              src={heroCrystal}
+              alt="Crystal ball with tarot cards"
+              className="relative z-10 w-full max-w-[360px] animate-float"
+              loading="eager"
+            />
+          </div>
+        </motion.div>
+
+        {/* Center — text */}
         <motion.div
           initial={{ opacity: 0, y: 24, filter: "blur(4px)" }}
           animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-          className="space-y-8"
+          className="space-y-8 text-center max-w-xl mx-auto"
         >
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-[1.08] tracking-tight text-balance">
-            Раскрой тайны звёзд и{" "}
+          <h1 className="text-4xl sm:text-5xl lg:text-[3.5rem] font-bold leading-[1.08] tracking-tight text-balance">
+            {t("hero.title1")}{" "}
             <em className="text-primary not-italic font-bold italic">
-              открой свой космический путь
+              {t("hero.title2")}
             </em>
           </h1>
-          <p className="text-lg text-muted-foreground max-w-lg leading-relaxed">
-            Мудрый AI-эзотерик с таро, нумерологией, астрологией и толкованием снов. 7 мистических практик в одном месте.
+          <p className="text-lg text-muted-foreground leading-relaxed max-w-md mx-auto">
+            {t("hero.subtitle")}
           </p>
-          <div className="flex flex-wrap gap-4">
+          <div className="flex flex-wrap justify-center gap-4">
             <Button variant="hero" size="xl">
               <SparklesIcon className="w-5 h-5" />
-              Начать бесплатно
+              {t("hero.cta")}
             </Button>
             <Button variant="hero-outline" size="xl">
               <Send className="w-5 h-5" />
-              Открыть в Telegram
+              {t("hero.telegram")}
             </Button>
           </div>
 
-          {/* Social proof */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5, duration: 0.6 }}
-            className="flex items-center gap-3 pt-2"
+            className="flex items-center justify-center gap-3 pt-2"
           >
             <div className="flex -space-x-2">
               {["АМ", "ВК", "ОН", "ДС"].map((initials, i) => (
@@ -57,28 +77,35 @@ export const Hero = () => {
               ))}
             </div>
             <p className="text-sm text-muted-foreground">
-              <span className="text-foreground font-semibold">10 000+</span> пользователей доверяют звёздам
+              <span className="text-foreground font-semibold">10 000+</span> {t("hero.socialProof")}
             </p>
           </motion.div>
         </motion.div>
 
         {/* Right — phone */}
         <motion.div
-          initial={{ opacity: 0, y: 40, filter: "blur(6px)" }}
-          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-          transition={{ duration: 0.9, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-          className="relative flex justify-center lg:justify-end"
+          initial={{ opacity: 0, x: 40, filter: "blur(6px)" }}
+          animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+          transition={{ duration: 0.9, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+          className="hidden lg:flex justify-center"
         >
           <div className="relative">
             <div className="absolute inset-0 bg-primary/15 rounded-full blur-[80px] scale-75 animate-[glow-pulse_4s_ease-in-out_infinite]" />
             <img
               src={heroPhone}
               alt="Таро Сонник — AI Эзотерик приложение"
-              className="relative z-10 w-full max-w-[420px] animate-float"
+              className="relative z-10 w-full max-w-[380px] animate-float"
+              style={{ animationDelay: "1s" }}
               loading="eager"
             />
           </div>
         </motion.div>
+
+        {/* Mobile: show both images stacked */}
+        <div className="flex lg:hidden justify-center gap-6 items-center">
+          <img src={heroCrystal} alt="" className="w-36 animate-float" />
+          <img src={heroPhone} alt="" className="w-36 animate-float" style={{ animationDelay: "1s" }} />
+        </div>
       </div>
     </section>
   );
