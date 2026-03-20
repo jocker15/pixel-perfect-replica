@@ -80,3 +80,16 @@
   0%, 100% { opacity: 0.4; }
   50% { opacity: 0.8; }
 }
+
+@keyframes zodiac-drift {
+  0% {
+    transform: translateY(0) translateX(0) rotate(0deg);
+    opacity: 0;
+  }
+  5% { opacity: 1; }
+  95% { opacity: 1; }
+  100% {
+    transform: translateY(-100vh) translateX(var(--drift-x)) rotate(360deg);
+    opacity: 0;
+  }
+}

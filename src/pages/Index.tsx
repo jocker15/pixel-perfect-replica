@@ -6,24 +6,30 @@ import { CompatibilityChecker } from "@/components/landing/CompatibilityChecker"
 import { Testimonials } from "@/components/landing/Testimonials";
 import { Pricing } from "@/components/landing/Pricing";
 import { Footer } from "@/components/landing/Footer";
+import { StarryBackground } from "@/components/landing/StarryBackground";
+import { FloatingZodiac } from "@/components/landing/FloatingZodiac";
 
 const Index = () => {
   return (
-    <div className="min-h-screen">
-      <Navbar />
-      <Hero />
-      <div id="features">
-        <Features />
+    <div className="min-h-screen relative">
+      <StarryBackground />
+      <FloatingZodiac />
+      <div className="relative z-10">
+        <Navbar />
+        <Hero />
+        <div id="features">
+          <Features />
+        </div>
+        <div id="how">
+          <HowItWorks />
+        </div>
+        <CompatibilityChecker />
+        <Testimonials />
+        <div id="pricing">
+          <Pricing />
+        </div>
+        <Footer />
       </div>
-      <div id="how">
-        <HowItWorks />
-      </div>
-      <CompatibilityChecker />
-      <Testimonials />
-      <div id="pricing">
-        <Pricing />
-      </div>
-      <Footer />
     </div>
   );
 };
