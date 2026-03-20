@@ -9,6 +9,7 @@ import { Footer } from "@/components/landing/Footer";
 import { StarryBackground } from "@/components/landing/StarryBackground";
 import { FloatingZodiac } from "@/components/landing/FloatingZodiac";
 import { ZodiacWheel } from "@/components/landing/ZodiacWheel";
+import { FlyingPlanets } from "@/components/landing/FlyingPlanets";
 
 const Index = () => {
   return (
@@ -16,6 +17,7 @@ const Index = () => {
       <StarryBackground />
       <FloatingZodiac />
       <ZodiacWheel />
+      <FlyingPlanets />
       <div className="relative z-10">
         <Navbar />
         <Hero />
