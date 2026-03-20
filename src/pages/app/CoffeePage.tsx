@@ -4,6 +4,8 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { PhotoUploader } from "@/components/app/PhotoUploader";
 import { Coffee, Sparkles, MessageSquare, Camera } from "lucide-react";
+import { useStreaming } from "@/hooks/use-streaming";
+import { coffeeReading } from "@/lib/api";
 
 const modes = ["symbolDay", "askQuestion", "photoAnalysis"] as const;
 const modeIcons = { symbolDay: Sparkles, askQuestion: MessageSquare, photoAnalysis: Camera };
@@ -12,15 +14,12 @@ export default function CoffeePage() {
   const { t } = useTranslation();
   const [mode, setMode] = useState<string>("symbolDay");
   const [question, setQuestion] = useState("");
-  const [result, setResult] = useState("");
-  const [loading, setLoading] = useState(false);
+  const { text: result, loading, start, reset } = useStreaming();
 
   const handleGenerate = () => {
-    setLoading(true);
-    setTimeout(() => {
-      setResult("☽ В чашке просматривается символ полумесяца — знак перемен и интуиции. Ближайшие дни принесут неожиданные открытия. Доверьтесь внутреннему голосу, он укажет верный путь. Рядом с полумесяцем — фигура птицы, символ хороших новостей издалека.");
-      setLoading(false);
-    }, 2000);
+    start((cb, signal) =>
+      coffeeReading({ type: mode, question: question || undefined }, cb, signal)
+    );
   };
 
   return (
@@ -33,14 +32,13 @@ export default function CoffeePage() {
         <p className="text-muted-foreground text-sm">{t("app.coffee.subtitle")}</p>
       </motion.div>
 
-      {/* Mode selector */}
       <div className="grid grid-cols-3 gap-2">
         {modes.map((m) => {
           const Icon = modeIcons[m];
           return (
             <button
               key={m}
-              onClick={() => { setMode(m); setResult(""); }}
+              onClick={() => { setMode(m); reset(); }}
               className={`flex flex-col items-center gap-2 px-3 py-4 rounded-xl text-xs font-medium border transition-all ${
                 mode === m ? "bg-primary/10 border-primary/40 text-primary" : "bg-card border-border text-muted-foreground hover:border-primary/20"
               }`}
@@ -52,10 +50,9 @@ export default function CoffeePage() {
         })}
       </div>
 
-      {/* Mode content */}
       {mode === "symbolDay" && (
         <Button variant="hero" size="lg" className="w-full" onClick={handleGenerate} disabled={loading}>
-          {loading ? "Читаем символы..." : t("app.coffee.symbolDay")}
+          {loading ? "..." : t("app.coffee.symbolDay")}
         </Button>
       )}
 
@@ -68,7 +65,7 @@ export default function CoffeePage() {
             className="w-full bg-card border border-border rounded-xl px-4 py-3 text-sm focus:border-primary focus:outline-none transition-colors"
           />
           <Button variant="hero" size="lg" className="w-full" onClick={handleGenerate} disabled={loading || !question}>
-            {loading ? "Читаем символы..." : t("app.coffee.analyze")}
+            {loading ? "..." : t("app.coffee.analyze")}
           </Button>
         </div>
       )}
@@ -83,7 +80,6 @@ export default function CoffeePage() {
         />
       )}
 
-      {/* Steam animation while loading */}
       {loading && (
         <div className="flex justify-center py-6">
           <div className="relative">
@@ -101,10 +97,9 @@ export default function CoffeePage() {
         </div>
       )}
 
-      {/* Result */}
-      {result && (
+      {result && !loading && (
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="bg-card border border-border rounded-2xl p-5 space-y-3">
-          <p className="text-sm leading-relaxed">{result}</p>
+          <p className="text-sm leading-relaxed whitespace-pre-wrap">{result}</p>
           <Button variant="hero-outline" size="sm">{t("app.coffee.share")}</Button>
         </motion.div>
       )}
