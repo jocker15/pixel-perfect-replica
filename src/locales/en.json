@@ -288,8 +288,12 @@
       "deleteData": "Delete data",
       "logout": "Log out",
       "gender": "Gender",
+      "genderMale": "Male",
+      "genderFemale": "Female",
+      "genderOther": "Other",
       "displayName": "Display name",
       "myReport": "My report",
+      "myReportDesc": "Personalized 6-page PDF — zodiac, numerology, tarot, rune",
       "referral": "Invite a friend — get 7 free days"
     }
   }

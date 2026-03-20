@@ -22,6 +22,7 @@ import FacePage from "./pages/app/FacePage";
 import FengShuiPage from "./pages/app/FengShuiPage";
 import ReportPage from "./pages/app/ReportPage";
 import ModulesPage from "./pages/app/ModulesPage";
+import VisionPage from "./pages/app/VisionPage";
 import HistoryPage from "./pages/app/HistoryPage";
 import ProfilePage from "./pages/app/ProfilePage";
 
@@ -38,6 +39,7 @@ const App = () => (
           <Route path="/app" element={<AppLayout />}>
             <Route index element={<AppDashboard />} />
             <Route path="modules" element={<ModulesPage />} />
+            <Route path="vision" element={<VisionPage />} />
             <Route path="tarot" element={<TarotPage />} />
             <Route path="dream" element={<DreamPage />} />
             <Route path="numerology" element={<NumerologyPage />} />
