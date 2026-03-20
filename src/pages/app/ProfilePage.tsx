@@ -1,15 +1,19 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { LogOut, Trash2, CreditCard, FileText, Copy, Check, QrCode } from "lucide-react";
 import { LanguageSwitcher } from "@/components/landing/LanguageSwitcher";
 import { Link } from "react-router-dom";
 import { useUserProfile } from "@/contexts/UserProfileContext";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function ProfilePage() {
   const { t } = useTranslation();
   const { profile, setProfile } = useUserProfile();
+  const { logout } = useAuth();
+  const navigate = useNavigate();
   const [name, setName] = useState(profile.onboarded ? profile.name : t("app.defaultName"));
   const [gender, setGender] = useState<"male" | "female" | "other">(profile.gender || "male");
   const [copied, setCopied] = useState(false);
@@ -161,7 +165,7 @@ export default function ProfilePage() {
           <Trash2 className="w-5 h-5" />
           {t("app.profilePage.deleteData")}
         </Button>
-        <Button variant="ghost" size="lg" className="w-full justify-start gap-3 text-muted-foreground">
+        <Button variant="ghost" size="lg" className="w-full justify-start gap-3 text-muted-foreground" onClick={() => { logout(); navigate("/login"); }}>
           <LogOut className="w-5 h-5" />
           {t("app.profilePage.logout")}
         </Button>

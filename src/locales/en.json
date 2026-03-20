@@ -324,5 +324,23 @@
         "worldMeaning": "Completion of a cycle, harmony. Everything falls into place."
       }
     }
+  },
+  "auth": {
+    "loginSubtitle": "Sign in to unlock personalized readings",
+    "registerSubtitle": "Create an account for personalized readings",
+    "telegramLogin": "Sign in with Telegram",
+    "or": "or",
+    "password": "Password",
+    "confirmPassword": "Confirm password",
+    "login": "Sign in",
+    "register": "Sign up",
+    "createAccount": "Create account",
+    "noAccount": "Don't have an account?",
+    "haveAccount": "Already have an account?",
+    "invalidCredentials": "Invalid email or password",
+    "networkError": "Network error. Try again later",
+    "telegramError": "Telegram login error",
+    "passwordsMismatch": "Passwords don't match",
+    "registerError": "Registration error"
   }
 }

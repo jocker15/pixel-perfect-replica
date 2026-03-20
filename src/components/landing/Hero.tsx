@@ -68,7 +68,7 @@ export const Hero = () => {
             transition={{ duration: 0.6, delay: 1.5, ease: [0.16, 1, 0.3, 1] }}
             className="flex flex-wrap justify-center gap-4"
           >
-            <Button variant="hero" size="xl" onClick={() => navigate("/app")}>
+            <Button variant="hero" size="xl" onClick={() => navigate("/login")}>
               <SparklesIcon className="w-5 h-5" />
               {t("hero.cta")}
             </Button>
