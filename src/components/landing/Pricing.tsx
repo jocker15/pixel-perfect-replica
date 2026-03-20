@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
-import { Check, Sparkles, Crown } from "lucide-react";
+import { Check, Sparkles, Crown, Zap } from "lucide-react";
 
 export const Pricing = () => {
   const { t } = useTranslation();
@@ -17,6 +17,15 @@ export const Pricing = () => {
       icon: Sparkles,
     },
     {
+      name: t("pricing.trial"),
+      price: t("pricing.trialPrice"),
+      period: t("pricing.trialPeriod"),
+      features: [t("pricing.trialFeature1"), t("pricing.trialFeature2"), t("pricing.trialFeature3")],
+      cta: t("pricing.trialCta"),
+      featured: false,
+      icon: Zap,
+    },
+    {
       name: t("pricing.premium"),
       price: t("pricing.premiumPrice"),
       period: t("pricing.premiumPeriod"),
@@ -29,7 +38,7 @@ export const Pricing = () => {
 
   return (
     <section className="relative py-24 lg:py-32">
-      <div className="container max-w-4xl">
+      <div className="container max-w-5xl">
         <motion.div
           initial={{ opacity: 0, y: 20, filter: "blur(4px)" }}
           whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
@@ -41,7 +50,7 @@ export const Pricing = () => {
           <p className="text-muted-foreground text-lg">{t("pricing.subtitle")}</p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid md:grid-cols-3 gap-6">
           {plans.map((plan, i) => (
             <motion.div
               key={plan.name}
