@@ -32,7 +32,7 @@ export const Navbar = () => {
             </a>
           ))}
           <LanguageSwitcher />
-          <Button variant="hero" size="sm">{t("nav.start")}</Button>
+          <Button variant="hero" size="sm" onClick={() => navigate("/login")}>{t("nav.start")}</Button>
         </div>
 
         <div className="flex md:hidden items-center gap-2">

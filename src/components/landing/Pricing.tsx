@@ -95,7 +95,7 @@ export const Pricing = () => {
                 ))}
               </ul>
 
-              <Button variant={plan.featured ? "hero" : "hero-outline"} size="lg" className="w-full" onClick={() => navigate("/app")}>
+              <Button variant={plan.featured ? "hero" : "hero-outline"} size="lg" className="w-full" onClick={() => navigate("/login")}>
                 {plan.cta}
               </Button>
             </motion.div>
