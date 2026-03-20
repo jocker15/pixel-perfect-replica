@@ -2,22 +2,30 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
+import { useStreaming } from "@/hooks/use-streaming";
+import { tarotReading } from "@/lib/api";
 
 const spreadTypes = ["daily", "situation", "threeCards", "celticCross"] as const;
 
 export default function TarotPage() {
   const { t } = useTranslation();
   const [spread, setSpread] = useState<string>("daily");
+  const [question, setQuestion] = useState("");
   const [shuffling, setShuffling] = useState(false);
   const [cards, setCards] = useState<string[]>([]);
+  const { text: result, loading: streaming, start, reset } = useStreaming();
 
   const handleStart = () => {
     setShuffling(true);
     setCards([]);
+    reset();
     setTimeout(() => {
       setShuffling(false);
       const count = spread === "celticCross" ? 10 : spread === "threeCards" ? 3 : 1;
-      setCards(Array.from({ length: count }, (_, i) => `🃏`));
+      setCards(Array.from({ length: count }, () => "🃏"));
+      start((cb, signal) =>
+        tarotReading({ spread_type: spread, question: question || undefined }, cb, signal)
+      );
     }, 2000);
   };
 
@@ -32,7 +40,7 @@ export default function TarotPage() {
         {spreadTypes.map((s) => (
           <button
             key={s}
-            onClick={() => { setSpread(s); setCards([]); }}
+            onClick={() => { setSpread(s); setCards([]); reset(); }}
             className={`px-4 py-3 rounded-xl text-sm font-medium border transition-all ${
               spread === s ? "bg-primary/10 border-primary/40 text-primary" : "bg-card border-border text-muted-foreground hover:border-primary/20"
             }`}
@@ -43,11 +51,13 @@ export default function TarotPage() {
       </div>
 
       <input
+        value={question}
+        onChange={(e) => setQuestion(e.target.value)}
         placeholder={t("app.tarot.question")}
         className="w-full bg-card border border-border rounded-xl px-4 py-3 text-sm focus:border-primary focus:outline-none transition-colors"
       />
 
-      <Button variant="hero" size="lg" className="w-full" onClick={handleStart} disabled={shuffling}>
+      <Button variant="hero" size="lg" className="w-full" onClick={handleStart} disabled={shuffling || streaming}>
         {shuffling ? t("app.tarot.shuffle") : t("app.tarot.startReading")}
       </Button>
 
@@ -80,7 +90,9 @@ export default function TarotPage() {
             ))}
           </div>
           <div className="bg-card border border-border rounded-2xl p-5">
-            <p className="text-sm text-muted-foreground leading-relaxed">{t("app.cardOfDayMeaning")}</p>
+            <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-wrap">
+              {result || (streaming ? "..." : t("app.cardOfDayMeaning"))}
+            </p>
           </div>
         </motion.div>
       )}

@@ -2,13 +2,18 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
+import { useStreaming } from "@/hooks/use-streaming";
+import { ichingReading } from "@/lib/api";
 
 export default function IChingPage() {
   const { t } = useTranslation();
   const [lines, setLines] = useState<boolean[]>([]);
+  const { text: result, loading, start, reset } = useStreaming();
 
   const castCoins = () => {
     setLines(Array.from({ length: 6 }, () => Math.random() > 0.5));
+    reset();
+    start((cb, signal) => ichingReading(cb, signal));
   };
 
   return (
@@ -18,29 +23,38 @@ export default function IChingPage() {
         <p className="text-muted-foreground text-sm">{t("app.iching.subtitle")}</p>
       </motion.div>
 
-      <Button variant="hero" size="lg" className="w-full" onClick={castCoins}>{t("app.iching.castCoins")}</Button>
+      <Button variant="hero" size="lg" className="w-full" onClick={castCoins} disabled={loading}>
+        {loading ? "..." : t("app.iching.castCoins")}
+      </Button>
 
       {lines.length > 0 && (
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col items-center gap-2 py-6">
-          {lines.map((solid, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, scaleX: 0 }}
-              animate={{ opacity: 1, scaleX: 1 }}
-              transition={{ delay: (5 - i) * 0.15, duration: 0.4 }}
-              className="flex gap-2"
-            >
-              {solid ? (
-                <div className="w-32 h-3 bg-primary rounded-full" />
-              ) : (
-                <>
-                  <div className="w-14 h-3 bg-primary rounded-full" />
-                  <div className="w-4" />
-                  <div className="w-14 h-3 bg-primary rounded-full" />
-                </>
-              )}
-            </motion.div>
-          ))}
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
+          <div className="flex flex-col items-center gap-2 py-6">
+            {lines.map((solid, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, scaleX: 0 }}
+                animate={{ opacity: 1, scaleX: 1 }}
+                transition={{ delay: (5 - i) * 0.15, duration: 0.4 }}
+                className="flex gap-2"
+              >
+                {solid ? (
+                  <div className="w-32 h-3 bg-primary rounded-full" />
+                ) : (
+                  <>
+                    <div className="w-14 h-3 bg-primary rounded-full" />
+                    <div className="w-4" />
+                    <div className="w-14 h-3 bg-primary rounded-full" />
+                  </>
+                )}
+              </motion.div>
+            ))}
+          </div>
+          {result && (
+            <div className="bg-card border border-border rounded-2xl p-5">
+              <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-wrap">{result}</p>
+            </div>
+          )}
         </motion.div>
       )}
     </div>

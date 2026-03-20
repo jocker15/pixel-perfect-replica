@@ -3,10 +3,17 @@ import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Mic } from "lucide-react";
+import { useStreaming } from "@/hooks/use-streaming";
+import { dreamInterpret } from "@/lib/api";
 
 export default function DreamPage() {
   const { t } = useTranslation();
   const [text, setText] = useState("");
+  const { text: result, loading, start, reset } = useStreaming();
+
+  const handleInterpret = () => {
+    start((cb, signal) => dreamInterpret({ text }, cb, signal));
+  };
 
   return (
     <div className="space-y-6">
@@ -18,7 +25,7 @@ export default function DreamPage() {
       <div className="relative">
         <textarea
           value={text}
-          onChange={(e) => setText(e.target.value)}
+          onChange={(e) => { setText(e.target.value); reset(); }}
           placeholder={t("app.dream.placeholder")}
           rows={6}
           className="w-full bg-card border border-border rounded-2xl px-4 py-3 text-sm focus:border-primary focus:outline-none transition-colors resize-none"
@@ -28,9 +35,15 @@ export default function DreamPage() {
         </button>
       </div>
 
-      <Button variant="hero" size="lg" className="w-full" disabled={!text.trim()}>
-        {t("app.dream.interpret")}
+      <Button variant="hero" size="lg" className="w-full" disabled={!text.trim() || loading} onClick={handleInterpret}>
+        {loading ? "..." : t("app.dream.interpret")}
       </Button>
+
+      {result && (
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="bg-card border border-border rounded-2xl p-5">
+          <p className="text-sm leading-relaxed whitespace-pre-wrap">{result}</p>
+        </motion.div>
+      )}
     </div>
   );
 }

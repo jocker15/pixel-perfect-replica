@@ -1,16 +1,32 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
+import { useStreaming } from "@/hooks/use-streaming";
+import { astroForecast } from "@/lib/api";
 
 const zodiacKeys = ["aries","taurus","gemini","cancer","leo","virgo","libra","scorpio","sagittarius","capricorn","aquarius","pisces"] as const;
 const zodiacEmojis: Record<string, string> = { aries:"♈", taurus:"♉", gemini:"♊", cancer:"♋", leo:"♌", virgo:"♍", libra:"♎", scorpio:"♏", sagittarius:"♐", capricorn:"♑", aquarius:"♒", pisces:"♓" };
-
 const topics = ["general", "love", "career", "health"] as const;
 
 export default function AstroPage() {
   const { t } = useTranslation();
   const [sign, setSign] = useState("");
   const [topic, setTopic] = useState("general");
+  const { text: result, loading, start, reset } = useStreaming();
+
+  const handleSelect = (newSign: string) => {
+    setSign(newSign);
+    reset();
+    start((cb, signal) => astroForecast({ sign: newSign, topic }, cb, signal));
+  };
+
+  const handleTopic = (newTopic: string) => {
+    setTopic(newTopic);
+    if (sign) {
+      reset();
+      start((cb, signal) => astroForecast({ sign, topic: newTopic }, cb, signal));
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -23,7 +39,7 @@ export default function AstroPage() {
         {zodiacKeys.map((k) => (
           <button
             key={k}
-            onClick={() => setSign(k)}
+            onClick={() => handleSelect(k)}
             className={`flex flex-col items-center gap-1 p-3 rounded-xl border text-sm transition-all ${
               sign === k ? "bg-primary/10 border-primary/40 text-primary" : "bg-card border-border text-muted-foreground hover:border-primary/20"
             }`}
@@ -38,7 +54,7 @@ export default function AstroPage() {
         {topics.map((k) => (
           <button
             key={k}
-            onClick={() => setTopic(k)}
+            onClick={() => handleTopic(k)}
             className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${
               topic === k ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"
             }`}
@@ -49,12 +65,14 @@ export default function AstroPage() {
       </div>
 
       {sign && (
-        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="bg-card border border-border rounded-2xl p-6 space-y-3">
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} key={sign + topic} className="bg-card border border-border rounded-2xl p-6 space-y-3">
           <div className="flex items-center gap-3">
             <span className="text-3xl">{zodiacEmojis[sign]}</span>
             <h2 className="font-serif font-semibold text-lg">{t(`zodiac.${sign}`)}</h2>
           </div>
-          <p className="text-sm text-muted-foreground leading-relaxed">{t("app.astroDesc")}</p>
+          <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-wrap">
+            {result || (loading ? "..." : t("app.astroDesc"))}
+          </p>
         </motion.div>
       )}
     </div>
