@@ -18,12 +18,6 @@ const Index = () => {
       <FloatingZodiac />
       <ZodiacWheel />
       <FlyingPlanets />
-const Index = () => {
-  return (
-    <div className="min-h-screen relative">
-      <StarryBackground />
-      <FloatingZodiac />
-      <ZodiacWheel />
       <div className="relative z-10">
         <Navbar />
         <Hero />
