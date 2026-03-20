@@ -1,6 +1,7 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { TextReveal } from "./TextReveal";
 import { Send, Sparkles as SparklesIcon } from "lucide-react";
@@ -9,6 +10,7 @@ import heroCrystal from "@/assets/hero-crystal.png";
 
 export const Hero = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const sectionRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -66,11 +68,11 @@ export const Hero = () => {
             transition={{ duration: 0.6, delay: 1.5, ease: [0.16, 1, 0.3, 1] }}
             className="flex flex-wrap justify-center gap-4"
           >
-            <Button variant="hero" size="xl">
+            <Button variant="hero" size="xl" onClick={() => navigate("/app")}>
               <SparklesIcon className="w-5 h-5" />
               {t("hero.cta")}
             </Button>
-            <Button variant="hero-outline" size="xl">
+            <Button variant="hero-outline" size="xl" onClick={() => window.open("https://t.me/karty_ai_bot", "_blank")}>
               <Send className="w-5 h-5" />
               {t("hero.telegram")}
             </Button>

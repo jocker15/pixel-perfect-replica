@@ -1,10 +1,12 @@
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Check, Sparkles, Crown, Zap } from "lucide-react";
 
 export const Pricing = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   const plans = [
     {
@@ -93,7 +95,7 @@ export const Pricing = () => {
                 ))}
               </ul>
 
-              <Button variant={plan.featured ? "hero" : "hero-outline"} size="lg" className="w-full">
+              <Button variant={plan.featured ? "hero" : "hero-outline"} size="lg" className="w-full" onClick={() => navigate("/app")}>
                 {plan.cta}
               </Button>
             </motion.div>
