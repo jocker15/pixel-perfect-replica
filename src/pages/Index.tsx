@@ -15,10 +15,10 @@ const Index = () => {
     <div className="min-h-screen relative">
       <StarryBackground />
       <FloatingZodiac />
+      <ZodiacWheel />
       <div className="relative z-10">
         <Navbar />
         <Hero />
-        <ZodiacWheel />
         <div id="features">
           <Features />
         </div>
