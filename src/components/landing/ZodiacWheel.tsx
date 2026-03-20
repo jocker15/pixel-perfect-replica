@@ -1,5 +1,6 @@
 import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useMotionValueEvent } from "framer-motion";
+import { useState } from "react";
 
 const zodiacSymbols = [
   "♈", "♉", "♊", "♋", "♌", "♍",
@@ -21,10 +22,20 @@ export const ZodiacWheel = () => {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll();
 
-  const y = useTransform(scrollYProgress, [0, 1], ["0vh", "-40vh"]);
-  const outerRotate = useTransform(scrollYProgress, [0, 1], [0, 60]);
-  const innerRotate = useTransform(scrollYProgress, [0, 1], [0, -40]);
-  const planetRotate = useTransform(scrollYProgress, [0, 1], [0, 25]);
+  const y = useTransform(scrollYProgress, [0, 1], [0, -400]);
+  const outerRotateDeg = useTransform(scrollYProgress, [0, 1], [0, 60]);
+  const innerRotateDeg = useTransform(scrollYProgress, [0, 1], [0, -40]);
+  const planetRotateDeg = useTransform(scrollYProgress, [0, 1], [0, 25]);
+
+  const [outerR, setOuterR] = useState(0);
+  const [innerR, setInnerR] = useState(0);
+  const [planetR, setPlanetR] = useState(0);
+  const [yVal, setYVal] = useState(0);
+
+  useMotionValueEvent(outerRotateDeg, "change", setOuterR);
+  useMotionValueEvent(innerRotateDeg, "change", setInnerR);
+  useMotionValueEvent(planetRotateDeg, "change", setPlanetR);
+  useMotionValueEvent(y, "change", setYVal);
 
   const size = 800;
   const cx = size / 2;
@@ -35,7 +46,7 @@ export const ZodiacWheel = () => {
       ref={ref}
       className="fixed inset-0 pointer-events-none z-[1] flex items-center justify-center overflow-hidden"
     >
-      <motion.div style={{ y }} className="relative">
+      <div className="relative" style={{ transform: `translateY(${yVal}px)` }}>
         <svg
           width={size}
           height={size}
@@ -61,8 +72,7 @@ export const ZodiacWheel = () => {
           <circle cx={cx} cy={cy} r={cx * 0.96} fill="url(#wg)" />
 
           {/* === OUTER GROUP: zodiac ring === */}
-          <motion.g style={{ rotate: outerRotate, originX: `${cx}px`, originY: `${cy}px` }}>
-
+          <g transform={`rotate(${outerR} ${cx} ${cy})`}>
             {/* Concentric rings */}
             {[0.95, 0.82, 0.70, 0.58, 0.46, 0.34, 0.22, 0.12].map((r, i) => (
               <circle
@@ -152,10 +162,10 @@ export const ZodiacWheel = () => {
                 </text>
               );
             })}
-          </motion.g>
+          </g>
 
           {/* === INNER GROUP: planets + center — counter-rotate === */}
-          <motion.g style={{ rotate: innerRotate, originX: `${cx}px`, originY: `${cy}px` }}>
+          <g transform={`rotate(${innerR} ${cx} ${cy})`}>
             {/* Cross-hair lines */}
             {[0, 30, 60, 90, 120, 150].map((deg) => {
               const a = (deg * Math.PI) / 180;
@@ -177,10 +187,10 @@ export const ZodiacWheel = () => {
             {/* Center ornament */}
             <circle cx={cx} cy={cy} r={6} fill="none" stroke="hsl(27 89% 52%)" strokeOpacity={0.4} strokeWidth={1} filter="url(#glow)" />
             <circle cx={cx} cy={cy} r={2.5} fill="hsl(27 89% 52%)" fillOpacity={0.6} filter="url(#glow)" />
-          </motion.g>
+          </g>
 
           {/* === PLANET GROUP: separate rotation speed === */}
-          <motion.g style={{ rotate: planetRotate, originX: `${cx}px`, originY: `${cy}px` }}>
+          <g transform={`rotate(${planetR} ${cx} ${cy})`}>
             {planetSymbols.map((p, i) => {
               const a = (p.angle * Math.PI) / 180;
               const r = cx * p.orbit;
@@ -210,9 +220,9 @@ export const ZodiacWheel = () => {
                 </g>
               );
             })}
-          </motion.g>
+          </g>
         </svg>
-      </motion.div>
+      </div>
     </div>
   );
 };
