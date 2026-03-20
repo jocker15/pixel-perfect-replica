@@ -1,12 +1,12 @@
 import { Outlet, NavLink, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Home, Compass, Clock, User } from "lucide-react";
+import { Home, Compass, Camera, Clock, User, Sparkles } from "lucide-react";
 import { LanguageSwitcher } from "@/components/landing/LanguageSwitcher";
-import { Sparkles } from "lucide-react";
 
 const navItems = [
   { key: "home", icon: Home, path: "/app" },
   { key: "modules", icon: Compass, path: "/app/modules" },
+  { key: "vision", icon: Camera, path: "/app/vision" },
   { key: "history", icon: Clock, path: "/app/history" },
   { key: "profile", icon: User, path: "/app/profile" },
 ];
@@ -52,7 +52,7 @@ export default function AppLayout() {
         </div>
       </main>
 
-      {/* Bottom nav (mobile) */}
+      {/* Bottom nav (mobile) — 5 tabs */}
       <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-xl border-t border-border/50">
         <div className="flex items-center justify-around h-16">
           {navItems.map((item) => {
@@ -63,7 +63,7 @@ export default function AppLayout() {
               <NavLink
                 key={item.key}
                 to={item.path}
-                className={`flex flex-col items-center gap-1 py-2 px-3 transition-colors ${
+                className={`flex flex-col items-center gap-1 py-2 px-2 transition-colors ${
                   isActive ? "text-primary" : "text-muted-foreground"
                 }`}
               >

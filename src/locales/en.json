@@ -137,6 +137,9 @@
       "week": "This week",
       "month": "This month"
     },
+    "lunarCalendar": "Lunar Calendar",
+    "lunarPhase": "Waxing Moon — 12th lunar day",
+    "lunarAdvice": "A favorable day for new beginnings. Growth energy supports creativity and initiative.",
     "dailyCard": "Card of the Day",
     "dailyCardDesc": "Find out what the stars have in store for you",
     "astroDay": "Your astrological day",
@@ -144,6 +147,15 @@
     "quickActions": "Quick actions",
     "cardOfDay": "The Magician",
     "cardOfDayMeaning": "Beginning of a new path, creative power, self-confidence. Today you can turn any plan into reality.",
+    "reportCta": {
+      "title": "Personal Map",
+      "desc": "6-page personalized PDF: zodiac, numerology, rune, tarot card and recommendations",
+      "button": "Get report"
+    },
+    "visionPage": {
+      "title": "AI Vision",
+      "subtitle": "Photo-based modules — upload an image and get an interpretation"
+    },
     "tarot": {
       "title": "Tarot",
       "subtitle": "Choose a spread type",
@@ -276,8 +288,12 @@
       "deleteData": "Delete data",
       "logout": "Log out",
       "gender": "Gender",
+      "genderMale": "Male",
+      "genderFemale": "Female",
+      "genderOther": "Other",
       "displayName": "Display name",
       "myReport": "My report",
+      "myReportDesc": "Personalized 6-page PDF — zodiac, numerology, tarot, rune",
       "referral": "Invite a friend — get 7 free days"
     }
   }
