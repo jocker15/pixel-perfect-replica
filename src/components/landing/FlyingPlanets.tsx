@@ -1,357 +1,350 @@
-import { useScroll, useTransform, motion, useMotionValueEvent } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
-import earthTexture from "@/assets/planets/earth.jpg";
-import moonTexture from "@/assets/planets/moon.jpg";
-import saturnTexture from "@/assets/planets/saturn.jpg";
+import earthTexture from "@/assets/planets/earth.png";
+import moonTexture from "@/assets/planets/moon.png";
+import saturnTexture from "@/assets/planets/saturn.png";
 import saturnRingTexture from "@/assets/planets/saturn_ring.png";
-import jupiterTexture from "@/assets/planets/jupiter.jpg";
-import marsTexture from "@/assets/planets/mars.jpg";
-import venusTexture from "@/assets/planets/venus.jpg";
+import jupiterTexture from "@/assets/planets/jupiter.png";
+import marsTexture from "@/assets/planets/mars.png";
+import venusTexture from "@/assets/planets/venus.png";
 
 interface PlanetConfig {
   id: string;
   size: number;
   texture: string;
-  ring?: boolean;
-  moon?: { texture: string; size: number };
+  hasRing?: boolean;
+  hasMoon?: boolean;
+  /** Horizontal start/end in vw */
   startX: number;
-  startY: number;
   endX: number;
-  endY: number;
+  /** Vertical base position in vh */
+  baseY: number;
+  /** Parallax speed multiplier — higher = moves faster = appears closer */
+  speed: number;
+  /** Direction: 1 = left-to-right, -1 = right-to-left */
+  direction: 1 | -1;
+  /** Scroll range [0..1] when planet is visible */
   scrollStart: number;
   scrollEnd: number;
-  blur: number;
+  /** Base opacity */
   opacity: number;
-  rotateSpeed: number;
-  tilt?: number;
+  /** Axial tilt in degrees */
+  tilt: number;
+  /** Texture rotation speed (deg per scroll unit) */
+  spinRate: number;
 }
 
 const planets: PlanetConfig[] = [
   {
     id: "earth",
-    size: 80,
+    size: 90,
     texture: earthTexture,
-    moon: { texture: moonTexture, size: 22 },
-    startX: -12,
-    startY: 8,
-    endX: 112,
-    endY: 18,
+    hasMoon: true,
+    startX: -15,
+    endX: 115,
+    baseY: 12,
+    speed: 1.2,
+    direction: 1,
     scrollStart: 0.0,
     scrollEnd: 0.35,
-    blur: 0,
-    opacity: 0.45,
-    rotateSpeed: 8,
+    opacity: 0.5,
     tilt: -23.4,
+    spinRate: 360,
   },
   {
     id: "saturn",
-    size: 90,
+    size: 100,
     texture: saturnTexture,
-    ring: true,
-    startX: 112,
-    startY: 35,
-    endX: -18,
-    endY: 50,
+    hasRing: true,
+    startX: 115,
+    endX: -20,
+    baseY: 38,
+    speed: 0.7,
+    direction: -1,
     scrollStart: 0.15,
     scrollEnd: 0.6,
-    blur: 0,
-    opacity: 0.4,
-    rotateSpeed: -6,
+    opacity: 0.45,
     tilt: -26.7,
-  },
-  {
-    id: "mars",
-    size: 50,
-    texture: marsTexture,
-    startX: 25,
-    startY: 110,
-    endX: 75,
-    endY: -12,
-    scrollStart: 0.1,
-    scrollEnd: 0.5,
-    blur: 0,
-    opacity: 0.35,
-    rotateSpeed: 15,
-    tilt: -25.2,
+    spinRate: 200,
   },
   {
     id: "jupiter",
-    size: 130,
+    size: 140,
     texture: jupiterTexture,
-    startX: 108,
-    startY: 12,
-    endX: -15,
-    endY: 70,
+    startX: 110,
+    endX: -18,
+    baseY: 15,
+    speed: 0.5,
+    direction: -1,
     scrollStart: 0.3,
     scrollEnd: 0.75,
-    blur: 1,
-    opacity: 0.3,
-    rotateSpeed: -5,
+    opacity: 0.35,
     tilt: -3.1,
+    spinRate: 280,
+  },
+  {
+    id: "mars",
+    size: 55,
+    texture: marsTexture,
+    startX: -12,
+    endX: 112,
+    baseY: 75,
+    speed: 1.5,
+    direction: 1,
+    scrollStart: 0.1,
+    scrollEnd: 0.5,
+    opacity: 0.4,
+    tilt: -25.2,
+    spinRate: 340,
   },
   {
     id: "venus",
-    size: 45,
+    size: 50,
     texture: venusTexture,
     startX: -10,
-    startY: 70,
-    endX: 108,
-    endY: 55,
+    endX: 112,
+    baseY: 60,
+    speed: 0.9,
+    direction: 1,
     scrollStart: 0.45,
     scrollEnd: 0.85,
-    blur: 0,
-    opacity: 0.32,
-    rotateSpeed: 10,
+    opacity: 0.38,
     tilt: -177.4,
+    spinRate: 150,
   },
 ];
 
-/* Textured sphere with lighting overlay */
-const TexturedSphere = ({ size, texture, tilt = 0, progress }: {
-  size: number; texture: string; tilt?: number; progress: number;
-}) => {
-  // Rotate texture based on scroll progress
-  const bgOffsetX = progress * 200; // shift texture as planet "rotates"
+function lerp(a: number, b: number, t: number) {
+  return a + (b - a) * t;
+}
 
-  return (
-    <div
-      className="rounded-full relative overflow-hidden"
-      style={{
-        width: size,
-        height: size,
-        transform: `rotate(${tilt}deg)`,
-      }}
-    >
-      {/* Texture layer — scrolls horizontally for rotation effect */}
-      <div
-        className="absolute inset-0 rounded-full"
-        style={{
-          backgroundImage: `url(${texture})`,
-          backgroundSize: `${size * 2}px ${size}px`,
-          backgroundPosition: `${bgOffsetX}px 0`,
-          backgroundRepeat: "repeat-x",
-        }}
-      />
-      {/* 3D lighting overlay */}
-      <div
-        className="absolute inset-0 rounded-full"
-        style={{
-          background: `
-            radial-gradient(circle at 35% 35%, 
-              rgba(255,255,255,0.12) 0%, 
-              transparent 40%),
-            radial-gradient(circle at 50% 50%, 
-              transparent 30%, 
-              rgba(0,0,0,0.3) 60%, 
-              rgba(0,0,0,0.7) 100%)
-          `,
-        }}
-      />
-      {/* Atmosphere rim for Earth */}
-      <div
-        className="absolute rounded-full"
-        style={{
-          inset: -2,
-          border: "1px solid rgba(100,180,255,0.08)",
-          borderRadius: "50%",
-        }}
-      />
-    </div>
-  );
-};
+function clamp(v: number, min: number, max: number) {
+  return Math.max(min, Math.min(max, v));
+}
 
-/* Saturn's ring using texture */
-const SaturnRings = ({ planetSize }: { planetSize: number }) => {
-  const ringWidth = planetSize * 2.2;
-  const ringHeight = planetSize * 0.6;
-  const offset = (ringWidth - planetSize) / 2;
+/** Maps scroll progress to planet-local progress [0..1] */
+function planetProgress(scroll: number, start: number, end: number) {
+  if (scroll < start || scroll > end) return -1;
+  return (scroll - start) / (end - start);
+}
 
-  return (
-    <>
-      {/* Back half of ring (behind planet) */}
-      <div
-        className="absolute"
-        style={{
-          width: ringWidth,
-          height: ringHeight,
-          left: -offset,
-          top: (planetSize - ringHeight) / 2,
-          backgroundImage: `url(${saturnRingTexture})`,
-          backgroundSize: "100% 100%",
-          borderRadius: "50%",
-          transform: "rotateX(75deg)",
-          clipPath: "inset(50% 0 0 0)",
-          opacity: 0.6,
-          zIndex: 0,
-        }}
-      />
-      {/* Front half of ring (in front of planet) */}
-      <div
-        className="absolute"
-        style={{
-          width: ringWidth,
-          height: ringHeight,
-          left: -offset,
-          top: (planetSize - ringHeight) / 2,
-          backgroundImage: `url(${saturnRingTexture})`,
-          backgroundSize: "100% 100%",
-          borderRadius: "50%",
-          transform: "rotateX(75deg)",
-          clipPath: "inset(0 0 50% 0)",
-          opacity: 0.6,
-          zIndex: 3,
-        }}
-      />
-    </>
-  );
-};
-
-/* Moon orbiting Earth */
-const Moon = ({ parentSize, progress }: { parentSize: number; progress: number }) => {
-  const orbitRadius = parentSize * 0.9;
-  const moonSize = 22;
-  const angle = progress * Math.PI * 6; // Multiple orbits during transit
-  const mx = Math.cos(angle) * orbitRadius;
-  const my = Math.sin(angle) * orbitRadius * 0.35; // Elliptical orbit
-  const behindPlanet = Math.sin(angle) > 0.3; // Simple depth check
-
-  return (
-    <div
-      className="absolute rounded-full"
-      style={{
-        width: moonSize,
-        height: moonSize,
-        left: parentSize / 2 + mx - moonSize / 2,
-        top: parentSize / 2 + my - moonSize / 2,
-        zIndex: behindPlanet ? -1 : 4,
-        opacity: behindPlanet ? 0.4 : 0.8,
-        transition: "opacity 0.3s",
-      }}
-    >
-      {/* Moon texture */}
-      <div
-        className="absolute inset-0 rounded-full overflow-hidden"
-        style={{
-          backgroundImage: `url(${moonTexture})`,
-          backgroundSize: `${moonSize * 2}px ${moonSize}px`,
-          backgroundRepeat: "repeat-x",
-        }}
-      />
-      {/* Moon lighting */}
-      <div
-        className="absolute inset-0 rounded-full"
-        style={{
-          background: `radial-gradient(circle at 35% 35%, rgba(255,255,255,0.15) 0%, transparent 40%), radial-gradient(circle at 50% 50%, transparent 25%, rgba(0,0,0,0.5) 80%)`,
-        }}
-      />
-    </div>
-  );
-};
-
-const PlanetElement = ({ planet }: { planet: PlanetConfig }) => {
-  const { scrollYProgress } = useScroll();
-  const [progressVal, setProgressVal] = useState(0);
-
-  const progress = useTransform(
-    scrollYProgress,
-    [planet.scrollStart, planet.scrollEnd],
-    [0, 1]
-  );
-
-  useMotionValueEvent(progress, "change", (v) => setProgressVal(v));
-
-  const x = useTransform(progress, [0, 1], [`${planet.startX}vw`, `${planet.endX}vw`]);
-  const yPos = useTransform(progress, [0, 1], [`${planet.startY}vh`, `${planet.endY}vh`]);
-  const rotate = useTransform(progress, [0, 1], [0, planet.rotateSpeed * 10]);
-  const opacity = useTransform(
-    progress,
-    [0, 0.1, 0.5, 0.9, 1],
-    [0, planet.opacity, planet.opacity, planet.opacity, 0]
-  );
-  const scale = useTransform(
-    progress,
-    [0, 0.3, 0.7, 1],
-    [0.6, 1, 1, 0.6]
-  );
-
-  const containerSize = planet.ring ? planet.size * 2.2 : planet.size;
-
-  return (
-    <motion.div
-      className="absolute pointer-events-none"
-      style={{
-        x,
-        y: yPos,
-        rotate,
-        opacity,
-        scale,
-        width: containerSize,
-        height: containerSize,
-        filter: planet.blur > 0 ? `blur(${planet.blur}px)` : undefined,
-      }}
-    >
-      {/* Planet body centered */}
-      <div
-        className="absolute"
-        style={{
-          width: planet.size,
-          height: planet.size,
-          left: (containerSize - planet.size) / 2,
-          top: (containerSize - planet.size) / 2,
-          zIndex: 1,
-        }}
-      >
-        <TexturedSphere
-          size={planet.size}
-          texture={planet.texture}
-          tilt={planet.tilt}
-          progress={progressVal}
-        />
-
-        {/* Moon for Earth */}
-        {planet.moon && (
-          <Moon parentSize={planet.size} progress={progressVal} />
-        )}
-      </div>
-
-      {/* Saturn rings */}
-      {planet.ring && (
-        <div
-          className="absolute"
-          style={{
-            width: planet.size,
-            height: planet.size,
-            left: (containerSize - planet.size) / 2,
-            top: (containerSize - planet.size) / 2,
-          }}
-        >
-          <SaturnRings planetSize={planet.size} />
-        </div>
-      )}
-
-      {/* Ambient glow */}
-      <div
-        className="absolute rounded-full"
-        style={{
-          width: planet.size * 1.6,
-          height: planet.size * 1.6,
-          left: containerSize / 2 - planet.size * 0.8,
-          top: containerSize / 2 - planet.size * 0.8,
-          background: `radial-gradient(circle, rgba(242, 122, 26, 0.06) 0%, transparent 70%)`,
-          pointerEvents: "none",
-        }}
-      />
-    </motion.div>
-  );
-};
+/** Fade in/out at edges */
+function fadeEnvelope(t: number): number {
+  if (t < 0.1) return t / 0.1;
+  if (t > 0.9) return (1 - t) / 0.1;
+  return 1;
+}
 
 export const FlyingPlanets = () => {
+  const [scroll, setScroll] = useState(0);
+  const rafRef = useRef(0);
+
+  useEffect(() => {
+    let ticking = false;
+    const onScroll = () => {
+      if (!ticking) {
+        ticking = true;
+        rafRef.current = requestAnimationFrame(() => {
+          const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+          setScroll(maxScroll > 0 ? window.scrollY / maxScroll : 0);
+          ticking = false;
+        });
+      }
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(rafRef.current);
+    };
+  }, []);
+
   return (
     <div className="fixed inset-0 pointer-events-none z-[2] overflow-hidden">
-      {planets.map((planet) => (
-        <PlanetElement key={planet.id} planet={planet} />
-      ))}
+      {planets.map((p) => {
+        const t = planetProgress(scroll, p.scrollStart, p.scrollEnd);
+        if (t < 0) return null;
+
+        const tc = clamp(t, 0, 1);
+        const xPos = lerp(p.startX, p.endX, tc * p.speed / Math.max(p.speed, 1.5));
+        const xFinal = clamp(lerp(p.startX, p.endX, tc), p.startX < p.endX ? p.startX : p.endX, p.startX < p.endX ? p.endX : p.startX);
+        const yOffset = Math.sin(tc * Math.PI) * 8 * p.speed; // slight arc
+        const fade = fadeEnvelope(tc) * p.opacity;
+        const scaleFactor = 0.6 + 0.4 * Math.sin(tc * Math.PI); // grow in middle
+        const texRotation = tc * p.spinRate;
+
+        // Container size accounts for rings
+        const containerSize = p.hasRing ? p.size * 2.4 : p.size;
+
+        return (
+          <div
+            key={p.id}
+            className="absolute"
+            style={{
+              left: `${xFinal}vw`,
+              top: `calc(${p.baseY}vh + ${yOffset}px)`,
+              opacity: fade,
+              transform: `translate(-50%, -50%) scale(${scaleFactor})`,
+              width: containerSize,
+              height: containerSize,
+              transition: "none",
+              willChange: "transform, left, top, opacity",
+            }}
+          >
+            {/* Planet sphere */}
+            <div
+              className="absolute rounded-full overflow-hidden"
+              style={{
+                width: p.size,
+                height: p.size,
+                left: (containerSize - p.size) / 2,
+                top: (containerSize - p.size) / 2,
+                transform: `rotate(${p.tilt}deg)`,
+                zIndex: 1,
+              }}
+            >
+              {/* Rotating texture */}
+              <div
+                className="absolute rounded-full"
+                style={{
+                  width: p.size * 2,
+                  height: p.size,
+                  left: -(texRotation % p.size),
+                  top: 0,
+                  backgroundImage: `url(${p.texture})`,
+                  backgroundSize: `${p.size * 2}px ${p.size}px`,
+                  backgroundRepeat: "repeat-x",
+                }}
+              />
+              {/* Duplicate for seamless wrap */}
+              <div
+                className="absolute rounded-full"
+                style={{
+                  width: p.size * 2,
+                  height: p.size,
+                  left: -(texRotation % p.size) + p.size * 2,
+                  top: 0,
+                  backgroundImage: `url(${p.texture})`,
+                  backgroundSize: `${p.size * 2}px ${p.size}px`,
+                  backgroundRepeat: "repeat-x",
+                }}
+              />
+              {/* 3D lighting */}
+              <div
+                className="absolute inset-0 rounded-full"
+                style={{
+                  background: `
+                    radial-gradient(circle at 30% 30%, rgba(255,255,255,0.18) 0%, transparent 35%),
+                    radial-gradient(circle at 50% 50%, transparent 25%, rgba(0,0,0,0.25) 55%, rgba(0,0,0,0.7) 100%)
+                  `,
+                  zIndex: 2,
+                }}
+              />
+            </div>
+
+            {/* Saturn ring */}
+            {p.hasRing && (
+              <div
+                className="absolute"
+                style={{
+                  width: p.size,
+                  height: p.size,
+                  left: (containerSize - p.size) / 2,
+                  top: (containerSize - p.size) / 2,
+                }}
+              >
+                {/* Back ring */}
+                <div
+                  className="absolute"
+                  style={{
+                    width: p.size * 2.2,
+                    height: p.size * 0.55,
+                    left: -(p.size * 0.6),
+                    top: p.size * 0.22,
+                    backgroundImage: `url(${saturnRingTexture})`,
+                    backgroundSize: "100% 100%",
+                    borderRadius: "50%",
+                    transform: "rotateX(75deg)",
+                    clipPath: "inset(50% 0 0 0)",
+                    opacity: 0.55,
+                    zIndex: 0,
+                  }}
+                />
+                {/* Front ring */}
+                <div
+                  className="absolute"
+                  style={{
+                    width: p.size * 2.2,
+                    height: p.size * 0.55,
+                    left: -(p.size * 0.6),
+                    top: p.size * 0.22,
+                    backgroundImage: `url(${saturnRingTexture})`,
+                    backgroundSize: "100% 100%",
+                    borderRadius: "50%",
+                    transform: "rotateX(75deg)",
+                    clipPath: "inset(0 0 50% 0)",
+                    opacity: 0.55,
+                    zIndex: 3,
+                  }}
+                />
+              </div>
+            )}
+
+            {/* Moon orbiting Earth */}
+            {p.hasMoon && (() => {
+              const moonOrbitRadius = p.size * 0.85;
+              const moonAngle = tc * Math.PI * 8;
+              const moonX = Math.cos(moonAngle) * moonOrbitRadius;
+              const moonY = Math.sin(moonAngle) * moonOrbitRadius * 0.3;
+              const moonBehind = Math.sin(moonAngle) > 0.2;
+              const moonSize = 24;
+
+              return (
+                <div
+                  className="absolute rounded-full overflow-hidden"
+                  style={{
+                    width: moonSize,
+                    height: moonSize,
+                    left: containerSize / 2 + moonX - moonSize / 2,
+                    top: containerSize / 2 + moonY - moonSize / 2,
+                    zIndex: moonBehind ? 0 : 4,
+                    opacity: moonBehind ? 0.3 : 0.7,
+                  }}
+                >
+                  <div
+                    className="absolute inset-0"
+                    style={{
+                      backgroundImage: `url(${moonTexture})`,
+                      backgroundSize: `${moonSize * 2}px ${moonSize}px`,
+                      backgroundRepeat: "repeat-x",
+                    }}
+                  />
+                  <div
+                    className="absolute inset-0 rounded-full"
+                    style={{
+                      background: `radial-gradient(circle at 30% 30%, rgba(255,255,255,0.15) 0%, transparent 35%), radial-gradient(circle at 50% 50%, transparent 20%, rgba(0,0,0,0.6) 85%)`,
+                    }}
+                  />
+                </div>
+              );
+            })()}
+
+            {/* Ambient glow */}
+            <div
+              className="absolute rounded-full"
+              style={{
+                width: p.size * 1.8,
+                height: p.size * 1.8,
+                left: containerSize / 2 - p.size * 0.9,
+                top: containerSize / 2 - p.size * 0.9,
+                background: `radial-gradient(circle, hsla(27, 89%, 52%, 0.05) 0%, transparent 70%)`,
+                pointerEvents: "none",
+              }}
+            />
+          </div>
+        );
+      })}
     </div>
   );
 };
