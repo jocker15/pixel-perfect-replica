@@ -1,8 +1,6 @@
-import { useEffect, useState } from "react";
+const zodiacSymbols = ["♈","♉","♊","♋","♌","♍","♎","♏","♐","♑","♒","♓","☽","☉","♄","♃"];
 
-const zodiacSymbols = ["♈","♉","♊","♋","♌","♍","♎","♏","♐","♑","♒","♓","☽","☉","♄","♃","♂","♀"];
-
-interface FloatingSymbol {
+interface Symbol {
   id: number;
   char: string;
   x: number;
@@ -14,25 +12,23 @@ interface FloatingSymbol {
 }
 
 export const FloatingZodiac = () => {
-  const [symbols] = useState<FloatingSymbol[]>(() =>
-    Array.from({ length: 14 }, (_, i) => ({
-      id: i,
-      char: zodiacSymbols[i % zodiacSymbols.length],
-      x: Math.random() * 90 + 5,
-      y: Math.random() * 100,
-      size: Math.random() * 16 + 14,
-      duration: Math.random() * 30 + 40,
-      delay: Math.random() * -40,
-      driftX: (Math.random() - 0.5) * 60,
-    }))
-  );
+  const symbols: Symbol[] = Array.from({ length: 10 }, (_, i) => ({
+    id: i,
+    char: zodiacSymbols[i % zodiacSymbols.length],
+    x: Math.random() * 85 + 7,
+    y: Math.random() * 100,
+    size: Math.random() * 12 + 16,
+    duration: Math.random() * 40 + 60,
+    delay: Math.random() * -50,
+    driftX: (Math.random() - 0.5) * 30,
+  }));
 
   return (
     <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
       {symbols.map((s) => (
         <div
           key={s.id}
-          className="absolute text-primary/[0.06] font-serif select-none"
+          className="absolute text-primary/[0.035] font-serif select-none"
           style={{
             left: `${s.x}%`,
             top: `${s.y}%`,
