@@ -21,7 +21,7 @@ async function streamRequest(
 ) {
   const res = await fetch(`${API_URL}${endpoint}`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: getAuthHeaders(),
     body: JSON.stringify(body),
     signal,
   });
