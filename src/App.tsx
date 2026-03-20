@@ -14,6 +14,13 @@ import AstroPage from "./pages/app/AstroPage";
 import CompatPage from "./pages/app/CompatPage";
 import RunesPage from "./pages/app/RunesPage";
 import IChingPage from "./pages/app/IChingPage";
+import CoffeePage from "./pages/app/CoffeePage";
+import StonesPage from "./pages/app/StonesPage";
+import PalmPage from "./pages/app/PalmPage";
+import AuraPage from "./pages/app/AuraPage";
+import FacePage from "./pages/app/FacePage";
+import FengShuiPage from "./pages/app/FengShuiPage";
+import ReportPage from "./pages/app/ReportPage";
 import ModulesPage from "./pages/app/ModulesPage";
 import HistoryPage from "./pages/app/HistoryPage";
 import ProfilePage from "./pages/app/ProfilePage";
@@ -38,6 +45,13 @@ const App = () => (
             <Route path="compat" element={<CompatPage />} />
             <Route path="runes" element={<RunesPage />} />
             <Route path="iching" element={<IChingPage />} />
+            <Route path="coffee" element={<CoffeePage />} />
+            <Route path="stones" element={<StonesPage />} />
+            <Route path="palm" element={<PalmPage />} />
+            <Route path="aura" element={<AuraPage />} />
+            <Route path="face" element={<FacePage />} />
+            <Route path="fengshui" element={<FengShuiPage />} />
+            <Route path="report" element={<ReportPage />} />
             <Route path="history" element={<HistoryPage />} />
             <Route path="profile" element={<ProfilePage />} />
           </Route>
