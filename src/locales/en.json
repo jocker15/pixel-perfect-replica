@@ -42,6 +42,22 @@
     "step3": "Get your answer",
     "step3Desc": "Personalized mystical interpretation in detail"
   },
+  "compatibility": {
+    "title": "Check compatibility",
+    "subtitle": "Discover how the stars affect your couple",
+    "yourSign": "Your sign",
+    "partnerSign": "Partner's sign",
+    "check": "Check compatibility",
+    "love": "Love",
+    "friendship": "Friendship",
+    "work": "Work",
+    "result": "Great match! Fiery energy and depth of feelings create a powerful union.",
+    "selectSign": "Select sign"
+  },
+  "testimonials": {
+    "title": "What users say",
+    "subtitle": "Stories from those who trusted the stars"
+  },
   "pricing": {
     "title": "Choose your path",
     "subtitle": "Start free, unlock more with Premium",
@@ -70,5 +86,113 @@
     "channel": "Channel",
     "privacy": "Privacy Policy",
     "copyright": "© 2026 Tarot Dreambook — AI Esoteric"
+  },
+  "zodiac": {
+    "aries": "Aries",
+    "taurus": "Taurus",
+    "gemini": "Gemini",
+    "cancer": "Cancer",
+    "leo": "Leo",
+    "virgo": "Virgo",
+    "libra": "Libra",
+    "scorpio": "Scorpio",
+    "sagittarius": "Sagittarius",
+    "capricorn": "Capricorn",
+    "aquarius": "Aquarius",
+    "pisces": "Pisces"
+  },
+  "app": {
+    "home": "Home",
+    "modules": "Modules",
+    "history": "History",
+    "profile": "Profile",
+    "greeting": "Hello,",
+    "defaultName": "Traveler",
+    "tabs": {
+      "today": "Today",
+      "week": "This week",
+      "month": "This month"
+    },
+    "dailyCard": "Card of the Day",
+    "dailyCardDesc": "Find out what the stars have in store for you",
+    "astroDay": "Your astrological day",
+    "astroDesc": "Today the stars favor creative endeavors. Trust your intuition in important decisions.",
+    "quickActions": "Quick actions",
+    "cardOfDay": "The Magician",
+    "cardOfDayMeaning": "Beginning of a new path, creative power, self-confidence. Today you can turn any plan into reality.",
+    "tarot": {
+      "title": "Tarot",
+      "subtitle": "Choose a spread type",
+      "daily": "Daily",
+      "situation": "Situation",
+      "threeCards": "Three cards",
+      "celticCross": "Celtic cross",
+      "question": "Your question (optional)",
+      "startReading": "Start reading",
+      "shuffle": "Shuffling cards..."
+    },
+    "dream": {
+      "title": "Dream Book",
+      "subtitle": "Tell us about your dream",
+      "placeholder": "Describe your dream in as much detail as possible...",
+      "interpret": "Interpret dream",
+      "voice": "Voice input"
+    },
+    "numerology": {
+      "title": "Numerology",
+      "subtitle": "Discover your destiny number",
+      "name": "Your full name",
+      "birthDate": "Date of birth",
+      "calculate": "Calculate",
+      "destinyNumber": "Destiny number",
+      "matrix": "Pythagorean matrix"
+    },
+    "astro": {
+      "title": "Astrology",
+      "subtitle": "Personal horoscope",
+      "general": "General",
+      "love": "Love",
+      "career": "Career",
+      "health": "Health",
+      "selectSign": "Select sign or enter date of birth"
+    },
+    "compat": {
+      "title": "Compatibility",
+      "subtitle": "Couple analysis",
+      "yourDate": "Your date of birth",
+      "partnerDate": "Partner's date",
+      "analyze": "Analyze"
+    },
+    "runes": {
+      "title": "Runes",
+      "subtitle": "Elder Futhark spread",
+      "oneRune": "1 rune",
+      "threeRunes": "3 runes",
+      "question": "Question",
+      "cast": "Cast runes"
+    },
+    "iching": {
+      "title": "I Ching",
+      "subtitle": "Wisdom of the Book of Changes",
+      "castCoins": "Cast coins",
+      "hexagram": "Hexagram"
+    },
+    "historyPage": {
+      "title": "Session history",
+      "filterAll": "All",
+      "empty": "No records yet. Start your journey of discovery!",
+      "date": "Date"
+    },
+    "profilePage": {
+      "title": "Profile",
+      "birthDate": "Date of birth",
+      "zodiacSign": "Zodiac sign",
+      "destinyNumber": "Destiny number",
+      "sessions": "sessions",
+      "withUsSince": "with us since March 2026",
+      "subscription": "Manage subscription",
+      "deleteData": "Delete data",
+      "logout": "Log out"
+    }
   }
 }
