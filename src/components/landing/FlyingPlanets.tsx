@@ -1,10 +1,20 @@
-import { useScroll, useTransform, motion } from "framer-motion";
+import { useScroll, useTransform, motion, useMotionValueEvent } from "framer-motion";
+import { useState } from "react";
 
-interface Planet {
+import earthTexture from "@/assets/planets/earth.jpg";
+import moonTexture from "@/assets/planets/moon.jpg";
+import saturnTexture from "@/assets/planets/saturn.jpg";
+import saturnRingTexture from "@/assets/planets/saturn_ring.png";
+import jupiterTexture from "@/assets/planets/jupiter.jpg";
+import marsTexture from "@/assets/planets/mars.jpg";
+import venusTexture from "@/assets/planets/venus.jpg";
+
+interface PlanetConfig {
   id: string;
   size: number;
-  renderPlanet: (size: number) => React.ReactNode;
-  ring?: { width: number; height: number; color: string; shadow: string };
+  texture: string;
+  ring?: boolean;
+  moon?: { texture: string; size: number };
   startX: number;
   startY: number;
   endX: number;
@@ -14,32 +24,15 @@ interface Planet {
   blur: number;
   opacity: number;
   rotateSpeed: number;
+  tilt?: number;
 }
 
-const planets: Planet[] = [
-  // Earth — first, flies across the top
+const planets: PlanetConfig[] = [
   {
     id: "earth",
     size: 80,
-    renderPlanet: (s) => (
-      <div className="w-full h-full rounded-full relative overflow-hidden" style={{
-        background: `radial-gradient(circle at 30% 30%, hsl(210 60% 55%), hsl(200 70% 40%) 40%, hsl(140 45% 35%) 65%, hsl(200 60% 30%) 100%)`,
-        boxShadow: `inset -${s*0.15}px -${s*0.1}px ${s*0.3}px rgba(0,0,0,0.5), 0 0 ${s*0.5}px rgba(100,180,255,0.15), inset ${s*0.05}px ${s*0.05}px ${s*0.12}px rgba(255,255,255,0.12)`,
-      }}>
-        {/* Continents suggestion */}
-        <div className="absolute inset-0 rounded-full" style={{
-          background: `
-            radial-gradient(ellipse 35% 25% at 55% 40%, hsla(130,40%,35%,0.5) 0%, transparent 100%),
-            radial-gradient(ellipse 20% 30% at 30% 60%, hsla(130,35%,30%,0.4) 0%, transparent 100%),
-            radial-gradient(ellipse 15% 15% at 70% 25%, hsla(140,40%,35%,0.35) 0%, transparent 100%)
-          `,
-        }} />
-        {/* Atmosphere rim */}
-        <div className="absolute inset-0 rounded-full" style={{
-          background: `radial-gradient(circle at 50% 50%, transparent 42%, hsla(200,80%,60%,0.08) 48%, hsla(200,80%,70%,0.12) 50%, transparent 52%)`,
-        }} />
-      </div>
-    ),
+    texture: earthTexture,
+    moon: { texture: moonTexture, size: 22 },
     startX: -12,
     startY: 8,
     endX: 112,
@@ -47,30 +40,15 @@ const planets: Planet[] = [
     scrollStart: 0.0,
     scrollEnd: 0.35,
     blur: 0,
-    opacity: 0.3,
+    opacity: 0.45,
     rotateSpeed: 8,
+    tilt: -23.4,
   },
-  // Saturn — with prominent rings
   {
     id: "saturn",
-    size: 100,
-    ring: {
-      width: 200,
-      height: 55,
-      color: "hsla(40, 50%, 55%, 0.35)",
-      shadow: "0 0 12px rgba(242,122,26,0.12)",
-    },
-    renderPlanet: (s) => (
-      <div className="w-full h-full rounded-full relative overflow-hidden" style={{
-        background: `radial-gradient(circle at 35% 35%, hsl(45 55% 60%), hsl(38 45% 48%) 50%, hsl(30 35% 32%) 100%)`,
-        boxShadow: `inset -${s*0.15}px -${s*0.1}px ${s*0.3}px rgba(0,0,0,0.55), 0 0 ${s*0.4}px rgba(242,180,80,0.12), inset ${s*0.04}px ${s*0.04}px ${s*0.1}px rgba(255,255,255,0.08)`,
-      }}>
-        {/* Bands */}
-        <div className="absolute inset-0 rounded-full" style={{
-          background: `repeating-linear-gradient(0deg, transparent 0%, transparent 10%, hsla(35,40%,40%,0.15) 10%, hsla(35,40%,40%,0.15) 14%, transparent 14%, transparent 22%, hsla(30,30%,35%,0.12) 22%, hsla(30,30%,35%,0.12) 26%, transparent 26%, transparent 36%)`,
-        }} />
-      </div>
-    ),
+    size: 90,
+    texture: saturnTexture,
+    ring: true,
     startX: 112,
     startY: 35,
     endX: -18,
@@ -78,25 +56,14 @@ const planets: Planet[] = [
     scrollStart: 0.15,
     scrollEnd: 0.6,
     blur: 0,
-    opacity: 0.28,
+    opacity: 0.4,
     rotateSpeed: -6,
+    tilt: -26.7,
   },
-  // Mars — red planet
   {
     id: "mars",
     size: 50,
-    renderPlanet: (s) => (
-      <div className="w-full h-full rounded-full relative" style={{
-        background: `radial-gradient(circle at 35% 35%, hsl(8 65% 48%), hsl(5 55% 35%) 55%, hsl(0 45% 22%) 100%)`,
-        boxShadow: `inset -${s*0.15}px -${s*0.1}px ${s*0.25}px rgba(0,0,0,0.6), 0 0 ${s*0.3}px rgba(200,80,40,0.1), inset ${s*0.04}px ${s*0.04}px ${s*0.1}px rgba(255,255,255,0.06)`,
-      }}>
-        {/* Polar cap */}
-        <div className="absolute rounded-full" style={{
-          top: '5%', left: '30%', width: '40%', height: '18%',
-          background: `radial-gradient(ellipse, hsla(30,20%,75%,0.25) 0%, transparent 70%)`,
-        }} />
-      </div>
-    ),
+    texture: marsTexture,
     startX: 25,
     startY: 110,
     endX: 75,
@@ -104,29 +71,14 @@ const planets: Planet[] = [
     scrollStart: 0.1,
     scrollEnd: 0.5,
     blur: 0,
-    opacity: 0.25,
+    opacity: 0.35,
     rotateSpeed: 15,
+    tilt: -25.2,
   },
-  // Jupiter — huge with bands
   {
     id: "jupiter",
     size: 130,
-    renderPlanet: (s) => (
-      <div className="w-full h-full rounded-full relative overflow-hidden" style={{
-        background: `radial-gradient(circle at 35% 35%, hsl(30 55% 55%), hsl(25 45% 42%) 50%, hsl(20 35% 28%) 100%)`,
-        boxShadow: `inset -${s*0.14}px -${s*0.1}px ${s*0.3}px rgba(0,0,0,0.5), 0 0 ${s*0.5}px rgba(242,122,26,0.1), inset ${s*0.04}px ${s*0.04}px ${s*0.12}px rgba(255,255,255,0.06)`,
-      }}>
-        {/* Prominent bands */}
-        <div className="absolute inset-0 rounded-full" style={{
-          background: `repeating-linear-gradient(0deg, transparent 0%, transparent 6%, hsla(20,50%,35%,0.2) 6%, hsla(20,50%,35%,0.2) 9%, transparent 9%, transparent 15%, hsla(25,40%,50%,0.12) 15%, hsla(25,40%,50%,0.12) 18%, transparent 18%, transparent 24%)`,
-        }} />
-        {/* Great red spot */}
-        <div className="absolute rounded-full" style={{
-          top: '52%', left: '55%', width: '18%', height: '10%',
-          background: `radial-gradient(ellipse, hsla(10,60%,40%,0.35) 0%, transparent 70%)`,
-        }} />
-      </div>
-    ),
+    texture: jupiterTexture,
     startX: 108,
     startY: 12,
     endX: -15,
@@ -134,19 +86,14 @@ const planets: Planet[] = [
     scrollStart: 0.3,
     scrollEnd: 0.75,
     blur: 1,
-    opacity: 0.2,
+    opacity: 0.3,
     rotateSpeed: -5,
+    tilt: -3.1,
   },
-  // Venus — pale yellow
   {
     id: "venus",
     size: 45,
-    renderPlanet: (s) => (
-      <div className="w-full h-full rounded-full" style={{
-        background: `radial-gradient(circle at 35% 35%, hsl(42 50% 65%), hsl(38 40% 50%) 55%, hsl(32 30% 35%) 100%)`,
-        boxShadow: `inset -${s*0.14}px -${s*0.1}px ${s*0.25}px rgba(0,0,0,0.5), 0 0 ${s*0.3}px rgba(242,200,100,0.1), inset ${s*0.04}px ${s*0.04}px ${s*0.1}px rgba(255,255,255,0.1)`,
-      }} />
-    ),
+    texture: venusTexture,
     startX: -10,
     startY: 70,
     endX: 108,
@@ -154,19 +101,165 @@ const planets: Planet[] = [
     scrollStart: 0.45,
     scrollEnd: 0.85,
     blur: 0,
-    opacity: 0.22,
+    opacity: 0.32,
     rotateSpeed: 10,
+    tilt: -177.4,
   },
 ];
 
-const PlanetElement = ({ planet }: { planet: Planet }) => {
+/* Textured sphere with lighting overlay */
+const TexturedSphere = ({ size, texture, tilt = 0, progress }: {
+  size: number; texture: string; tilt?: number; progress: number;
+}) => {
+  // Rotate texture based on scroll progress
+  const bgOffsetX = progress * 200; // shift texture as planet "rotates"
+
+  return (
+    <div
+      className="rounded-full relative overflow-hidden"
+      style={{
+        width: size,
+        height: size,
+        transform: `rotate(${tilt}deg)`,
+      }}
+    >
+      {/* Texture layer — scrolls horizontally for rotation effect */}
+      <div
+        className="absolute inset-0 rounded-full"
+        style={{
+          backgroundImage: `url(${texture})`,
+          backgroundSize: `${size * 2}px ${size}px`,
+          backgroundPosition: `${bgOffsetX}px 0`,
+          backgroundRepeat: "repeat-x",
+        }}
+      />
+      {/* 3D lighting overlay */}
+      <div
+        className="absolute inset-0 rounded-full"
+        style={{
+          background: `
+            radial-gradient(circle at 35% 35%, 
+              rgba(255,255,255,0.12) 0%, 
+              transparent 40%),
+            radial-gradient(circle at 50% 50%, 
+              transparent 30%, 
+              rgba(0,0,0,0.3) 60%, 
+              rgba(0,0,0,0.7) 100%)
+          `,
+        }}
+      />
+      {/* Atmosphere rim for Earth */}
+      <div
+        className="absolute rounded-full"
+        style={{
+          inset: -2,
+          border: "1px solid rgba(100,180,255,0.08)",
+          borderRadius: "50%",
+        }}
+      />
+    </div>
+  );
+};
+
+/* Saturn's ring using texture */
+const SaturnRings = ({ planetSize }: { planetSize: number }) => {
+  const ringWidth = planetSize * 2.2;
+  const ringHeight = planetSize * 0.6;
+  const offset = (ringWidth - planetSize) / 2;
+
+  return (
+    <>
+      {/* Back half of ring (behind planet) */}
+      <div
+        className="absolute"
+        style={{
+          width: ringWidth,
+          height: ringHeight,
+          left: -offset,
+          top: (planetSize - ringHeight) / 2,
+          backgroundImage: `url(${saturnRingTexture})`,
+          backgroundSize: "100% 100%",
+          borderRadius: "50%",
+          transform: "rotateX(75deg)",
+          clipPath: "inset(50% 0 0 0)",
+          opacity: 0.6,
+          zIndex: 0,
+        }}
+      />
+      {/* Front half of ring (in front of planet) */}
+      <div
+        className="absolute"
+        style={{
+          width: ringWidth,
+          height: ringHeight,
+          left: -offset,
+          top: (planetSize - ringHeight) / 2,
+          backgroundImage: `url(${saturnRingTexture})`,
+          backgroundSize: "100% 100%",
+          borderRadius: "50%",
+          transform: "rotateX(75deg)",
+          clipPath: "inset(0 0 50% 0)",
+          opacity: 0.6,
+          zIndex: 3,
+        }}
+      />
+    </>
+  );
+};
+
+/* Moon orbiting Earth */
+const Moon = ({ parentSize, progress }: { parentSize: number; progress: number }) => {
+  const orbitRadius = parentSize * 0.9;
+  const moonSize = 22;
+  const angle = progress * Math.PI * 6; // Multiple orbits during transit
+  const mx = Math.cos(angle) * orbitRadius;
+  const my = Math.sin(angle) * orbitRadius * 0.35; // Elliptical orbit
+  const behindPlanet = Math.sin(angle) > 0.3; // Simple depth check
+
+  return (
+    <div
+      className="absolute rounded-full"
+      style={{
+        width: moonSize,
+        height: moonSize,
+        left: parentSize / 2 + mx - moonSize / 2,
+        top: parentSize / 2 + my - moonSize / 2,
+        zIndex: behindPlanet ? -1 : 4,
+        opacity: behindPlanet ? 0.4 : 0.8,
+        transition: "opacity 0.3s",
+      }}
+    >
+      {/* Moon texture */}
+      <div
+        className="absolute inset-0 rounded-full overflow-hidden"
+        style={{
+          backgroundImage: `url(${moonTexture})`,
+          backgroundSize: `${moonSize * 2}px ${moonSize}px`,
+          backgroundRepeat: "repeat-x",
+        }}
+      />
+      {/* Moon lighting */}
+      <div
+        className="absolute inset-0 rounded-full"
+        style={{
+          background: `radial-gradient(circle at 35% 35%, rgba(255,255,255,0.15) 0%, transparent 40%), radial-gradient(circle at 50% 50%, transparent 25%, rgba(0,0,0,0.5) 80%)`,
+        }}
+      />
+    </div>
+  );
+};
+
+const PlanetElement = ({ planet }: { planet: PlanetConfig }) => {
   const { scrollYProgress } = useScroll();
+  const [progressVal, setProgressVal] = useState(0);
 
   const progress = useTransform(
     scrollYProgress,
     [planet.scrollStart, planet.scrollEnd],
     [0, 1]
   );
+
+  useMotionValueEvent(progress, "change", (v) => setProgressVal(v));
 
   const x = useTransform(progress, [0, 1], [`${planet.startX}vw`, `${planet.endX}vw`]);
   const yPos = useTransform(progress, [0, 1], [`${planet.startY}vh`, `${planet.endY}vh`]);
@@ -182,6 +275,8 @@ const PlanetElement = ({ planet }: { planet: Planet }) => {
     [0.6, 1, 1, 0.6]
   );
 
+  const containerSize = planet.ring ? planet.size * 2.2 : planet.size;
+
   return (
     <motion.div
       className="absolute pointer-events-none"
@@ -191,74 +286,48 @@ const PlanetElement = ({ planet }: { planet: Planet }) => {
         rotate,
         opacity,
         scale,
-        width: planet.ring ? planet.ring.width : planet.size,
-        height: planet.ring ? planet.ring.width : planet.size,
+        width: containerSize,
+        height: containerSize,
         filter: planet.blur > 0 ? `blur(${planet.blur}px)` : undefined,
       }}
     >
-      {/* Center the planet body */}
+      {/* Planet body centered */}
       <div
         className="absolute"
         style={{
           width: planet.size,
           height: planet.size,
-          left: planet.ring ? (planet.ring.width - planet.size) / 2 : 0,
-          top: planet.ring ? (planet.ring.width - planet.size) / 2 : 0,
+          left: (containerSize - planet.size) / 2,
+          top: (containerSize - planet.size) / 2,
+          zIndex: 1,
         }}
       >
-        {planet.renderPlanet(planet.size)}
+        <TexturedSphere
+          size={planet.size}
+          texture={planet.texture}
+          tilt={planet.tilt}
+          progress={progressVal}
+        />
+
+        {/* Moon for Earth */}
+        {planet.moon && (
+          <Moon parentSize={planet.size} progress={progressVal} />
+        )}
       </div>
 
-      {/* Ring */}
+      {/* Saturn rings */}
       {planet.ring && (
-        <>
-          {/* Back ring (behind planet) */}
-          <div
-            className="absolute"
-            style={{
-              width: planet.ring.width,
-              height: planet.ring.height,
-              left: 0,
-              top: (planet.ring.width - planet.ring.height) / 2,
-              border: `2.5px solid ${planet.ring.color}`,
-              borderRadius: "50%",
-              transform: "rotateX(72deg)",
-              boxShadow: planet.ring.shadow,
-              clipPath: "inset(50% 0 0 0)",
-              zIndex: 0,
-            }}
-          />
-          {/* Front ring (in front of planet) */}
-          <div
-            className="absolute"
-            style={{
-              width: planet.ring.width,
-              height: planet.ring.height,
-              left: 0,
-              top: (planet.ring.width - planet.ring.height) / 2,
-              border: `2px solid ${planet.ring.color}`,
-              borderRadius: "50%",
-              transform: "rotateX(72deg)",
-              boxShadow: planet.ring.shadow,
-              clipPath: "inset(0 0 50% 0)",
-              zIndex: 2,
-            }}
-          />
-          {/* Inner ring */}
-          <div
-            className="absolute"
-            style={{
-              width: planet.ring.width * 0.82,
-              height: planet.ring.height * 0.75,
-              left: planet.ring.width * 0.09,
-              top: (planet.ring.width - planet.ring.height * 0.75) / 2,
-              border: `1.5px solid hsla(40, 45%, 50%, 0.2)`,
-              borderRadius: "50%",
-              transform: "rotateX(72deg)",
-              zIndex: 2,
-            }}
-          />
-        </>
+        <div
+          className="absolute"
+          style={{
+            width: planet.size,
+            height: planet.size,
+            left: (containerSize - planet.size) / 2,
+            top: (containerSize - planet.size) / 2,
+          }}
+        >
+          <SaturnRings planetSize={planet.size} />
+        </div>
       )}
 
       {/* Ambient glow */}
@@ -267,8 +336,8 @@ const PlanetElement = ({ planet }: { planet: Planet }) => {
         style={{
           width: planet.size * 1.6,
           height: planet.size * 1.6,
-          left: (planet.ring ? planet.ring.width : planet.size) / 2 - planet.size * 0.8,
-          top: (planet.ring ? planet.ring.width : planet.size) / 2 - planet.size * 0.8,
+          left: containerSize / 2 - planet.size * 0.8,
+          top: containerSize / 2 - planet.size * 0.8,
           background: `radial-gradient(circle, rgba(242, 122, 26, 0.06) 0%, transparent 70%)`,
           pointerEvents: "none",
         }}
