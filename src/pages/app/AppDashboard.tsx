@@ -2,8 +2,10 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import { Sparkles, Star, Moon, Camera, FileText } from "lucide-react";
+import { Sparkles, Star, Moon, Camera, FileText, UserCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useUserProfile } from "@/contexts/UserProfileContext";
+import OnboardingModal from "@/components/app/OnboardingModal";
 
 const quickModules = [
   { icon: "🔮", path: "/app/tarot", key: "tarot" },
@@ -24,18 +26,98 @@ const visionModules = [
 
 const moonPhases = ["🌑", "🌒", "🌓", "🌔", "🌕", "🌖", "🌗", "🌘"];
 
+// Mock tarot cards for demo
+const demoCards = [
+  { name: "theMagician", emoji: "🎭", meaning: "magicianMeaning" },
+  { name: "highPriestess", emoji: "🌙", meaning: "priestessMeaning" },
+  { name: "theEmpress", emoji: "👑", meaning: "empressMeaning" },
+  { name: "theStar", emoji: "⭐", meaning: "starMeaning" },
+  { name: "theWorld", emoji: "🌍", meaning: "worldMeaning" },
+];
+
 export default function AppDashboard() {
   const { t } = useTranslation();
+  const { profile } = useUserProfile();
   const [tab, setTab] = useState<"today" | "week" | "month">("today");
+  const [showOnboarding, setShowOnboarding] = useState(false);
+  const [showDemoCard, setShowDemoCard] = useState(false);
   const tabs = ["today", "week", "month"] as const;
 
-  // Mock moon phase based on day
   const dayOfMonth = new Date().getDate();
   const moonIndex = Math.floor((dayOfMonth % 30) / 3.75) % 8;
   const moonEmoji = moonPhases[moonIndex];
 
+  // Pick a "random" demo card based on day
+  const demoCard = demoCards[dayOfMonth % demoCards.length];
+
+  const handleOnboardingComplete = () => {
+    setShowOnboarding(false);
+    setShowDemoCard(true);
+  };
+
   return (
     <div className="space-y-8">
+      {/* Onboarding modal */}
+      {showOnboarding && <OnboardingModal onComplete={handleOnboardingComplete} />}
+
+      {/* Demo card after onboarding */}
+      {showDemoCard && (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-background/80 backdrop-blur-xl p-4"
+        >
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2, duration: 0.5 }}
+            className="w-full max-w-sm bg-card border border-border rounded-3xl p-8 text-center space-y-5"
+          >
+            <motion.div
+              initial={{ rotateY: 180, opacity: 0 }}
+              animate={{ rotateY: 0, opacity: 1 }}
+              transition={{ delay: 0.5, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              className="w-28 h-40 mx-auto bg-primary/10 border border-primary/20 rounded-2xl flex items-center justify-center"
+            >
+              <span className="text-5xl">{demoCard.emoji}</span>
+            </motion.div>
+            <h3 className="text-xl font-serif font-bold">
+              {t("app.onboarding.yourCard")}
+            </h3>
+            <p className="font-serif font-semibold text-primary">
+              {t(`app.onboarding.cards.${demoCard.name}`)}
+            </p>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              {t(`app.onboarding.cards.${demoCard.meaning}`)}
+            </p>
+            <Button variant="hero" size="lg" className="w-full" onClick={() => setShowDemoCard(false)}>
+              <Sparkles className="w-4 h-4 mr-1" />
+              {t("app.onboarding.startJourney")}
+            </Button>
+          </motion.div>
+        </motion.div>
+      )}
+
+      {/* Fill profile banner — only if not onboarded */}
+      {!profile.onboarded && (
+        <motion.div
+          initial={{ opacity: 0, y: -8 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-gradient-to-r from-primary/15 via-primary/5 to-transparent border border-primary/20 rounded-2xl p-5 flex items-center gap-4"
+        >
+          <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center shrink-0">
+            <UserCircle className="w-6 h-6 text-primary" />
+          </div>
+          <div className="flex-1">
+            <h3 className="font-semibold text-sm">{t("app.onboarding.bannerTitle")}</h3>
+            <p className="text-xs text-muted-foreground mt-0.5">{t("app.onboarding.bannerDesc")}</p>
+          </div>
+          <Button variant="hero" size="sm" onClick={() => setShowOnboarding(true)}>
+            {t("app.onboarding.bannerButton")}
+          </Button>
+        </motion.div>
+      )}
+
       {/* Greeting */}
       <motion.div
         initial={{ opacity: 0, y: 16 }}
@@ -47,7 +129,9 @@ export default function AppDashboard() {
           ✨
         </div>
         <div>
-          <h1 className="text-2xl font-bold font-serif">{t("app.greeting")} {t("app.defaultName")}</h1>
+          <h1 className="text-2xl font-bold font-serif">
+            {t("app.greeting")} {profile.onboarded ? profile.name : t("app.defaultName")}
+          </h1>
         </div>
       </motion.div>
 
