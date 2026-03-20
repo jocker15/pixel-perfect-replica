@@ -12,6 +12,8 @@ import { useAuth } from "@/contexts/AuthContext";
 export default function ProfilePage() {
   const { t } = useTranslation();
   const { profile, setProfile } = useUserProfile();
+  const { logout } = useAuth();
+  const navigate = useNavigate();
   const [name, setName] = useState(profile.onboarded ? profile.name : t("app.defaultName"));
   const [gender, setGender] = useState<"male" | "female" | "other">(profile.gender || "male");
   const [copied, setCopied] = useState(false);
