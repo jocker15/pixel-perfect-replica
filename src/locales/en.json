@@ -8,35 +8,51 @@
   "hero": {
     "title1": "Unlock the secrets of the stars and",
     "title2": "discover your cosmic path",
-    "subtitle": "A wise AI esoteric with tarot, numerology, astrology and dream interpretation. 7 mystical practices in one place.",
+    "subtitle": "14 mystical practices with AI. Tarot, palmistry, aura reading, dream interpretation and crystals — all in one place.",
     "cta": "Start for free",
     "telegram": "Open in Telegram",
     "socialProof": "users trust the stars"
   },
   "features": {
-    "title": "7 mystical practices",
+    "title": "14 mystical practices",
     "subtitle": "Everything you need for self-discovery — in one AI assistant",
+    "classicGroup": "Classic esoterics",
+    "visionGroup": "AI Vision + new practices",
     "tarot": "Tarot",
     "tarotDesc": "Daily, situational, Celtic cross spreads",
     "dreams": "Dream Book",
-    "dreamsDesc": "AI dream interpretation with symbol analysis",
+    "dreamsDesc": "AI dream interpretation, voice input",
     "numerology": "Numerology",
     "numerologyDesc": "Destiny number, Pythagorean matrix",
     "astrology": "Astrology",
     "astrologyDesc": "Personal horoscope, planetary transits",
     "compatibility": "Compatibility",
-    "compatibilityDesc": "Couple analysis across all systems",
+    "compatibilityDesc": "Couple analysis by zodiac + numerology",
     "runes": "Runes",
     "runesDesc": "Elder Futhark spreads with interpretation",
     "iching": "I Ching",
-    "ichingDesc": "Wisdom of the Book of Changes"
+    "ichingDesc": "Wisdom of the Book of Changes",
+    "coffee": "Coffee Grounds",
+    "coffeeDesc": "Photo of cup → AI finds symbols and interprets",
+    "stones": "Stones & Crystals",
+    "stonesDesc": "Crystal matching by need, lithotherapy",
+    "palm": "Palmistry",
+    "palmDesc": "Palm photo → reading lines of destiny",
+    "aura": "Aura",
+    "auraDesc": "Selfie → color and meaning of your aura",
+    "face": "Physiognomy",
+    "faceDesc": "Face photo → character from features",
+    "fengshui": "Feng Shui",
+    "fengshuiDesc": "Room photo → space harmonization",
+    "report": "Personal Map",
+    "reportDesc": "Personalized 6-page PDF report"
   },
   "howItWorks": {
     "title": "How it works",
     "subtitle": "Three simple steps to mystical knowledge",
     "step": "Step",
     "step1": "Ask a question",
-    "step1Desc": "By text or voice — the bot understands any phrasing",
+    "step1Desc": "By text, voice, or photo — the bot understands any format",
     "step2": "AI analyzes",
     "step2Desc": "Knowledge base of 20,000+ interpretations and mystical systems",
     "step3": "Get your answer",
@@ -66,16 +82,23 @@
     "freePrice": "$0",
     "freePeriod": "forever",
     "freeFeature1": "3 requests per day",
-    "freeFeature2": "All 7 modules",
+    "freeFeature2": "All 14 modules",
     "freeFeature3": "Voice input",
     "freeFeature4": "Last 7 days history",
     "freeCta": "Start for free",
+    "trial": "Trial",
+    "trialPrice": "49 ⭐",
+    "trialPeriod": "3 days",
+    "trialFeature1": "Unlimited requests",
+    "trialFeature2": "All 14 modules",
+    "trialFeature3": "No ads",
+    "trialCta": "Try now",
     "premium": "Premium",
-    "premiumPrice": "$4.99",
+    "premiumPrice": "299 ⭐",
     "premiumPeriod": "per month",
     "premiumFeature1": "Unlimited requests",
     "premiumFeature2": "Priority AI",
-    "premiumFeature3": "PDF reports",
+    "premiumFeature3": "PDF Personal Map",
     "premiumFeature4": "Full history",
     "premiumFeature5": "No ads",
     "premiumCta": "Try for free"
@@ -104,6 +127,7 @@
   "app": {
     "home": "Home",
     "modules": "Modules",
+    "vision": "Vision",
     "history": "History",
     "profile": "Profile",
     "greeting": "Hello,",
@@ -177,6 +201,64 @@
       "castCoins": "Cast coins",
       "hexagram": "Hexagram"
     },
+    "coffee": {
+      "title": "Coffee Grounds",
+      "subtitle": "Read your fortune from a coffee cup",
+      "symbolDay": "Symbol of the day",
+      "askQuestion": "Ask a question",
+      "photoAnalysis": "Photo analysis",
+      "questionPlaceholder": "Ask your question...",
+      "analyze": "Analyze",
+      "share": "Share"
+    },
+    "stones": {
+      "title": "Stones & Crystals",
+      "subtitle": "Find your power stone",
+      "stoneDay": "Stone of the day",
+      "recommend": "Find a stone",
+      "needPlaceholder": "What concerns you?",
+      "find": "Find stone"
+    },
+    "palm": {
+      "title": "Palmistry",
+      "subtitle": "Read your destiny from the lines of your hand",
+      "photoAnalysis": "Palm analysis",
+      "info": "About palm lines",
+      "instruction": "Photograph your palm in good light with fingers spread",
+      "analyze": "Analyze"
+    },
+    "aura": {
+      "title": "Aura",
+      "subtitle": "Discover the color of your aura",
+      "upload": "Upload a selfie",
+      "scanning": "Scanning aura...",
+      "share": "Share",
+      "download": "Download"
+    },
+    "face": {
+      "title": "Physiognomy",
+      "subtitle": "Character from facial features",
+      "photoAnalysis": "Photo analysis",
+      "info": "About physiognomy",
+      "instruction": "Front-facing photo in good lighting",
+      "analyze": "Analyze"
+    },
+    "fengshui": {
+      "title": "Feng Shui",
+      "subtitle": "Harmonize your space",
+      "photoAnalysis": "Room analysis",
+      "info": "Feng Shui tips",
+      "instruction": "Photograph the entire room",
+      "analyze": "Analyze"
+    },
+    "report": {
+      "title": "Personal Map",
+      "subtitle": "Personalized 6-page PDF report",
+      "generate": "Generate report",
+      "download": "Download PDF",
+      "fillProfile": "Fill out your profile to generate a report",
+      "generating": "Creating zodiac map..."
+    },
     "historyPage": {
       "title": "Session history",
       "filterAll": "All",
@@ -192,7 +274,11 @@
       "withUsSince": "with us since March 2026",
       "subscription": "Manage subscription",
       "deleteData": "Delete data",
-      "logout": "Log out"
+      "logout": "Log out",
+      "gender": "Gender",
+      "displayName": "Display name",
+      "myReport": "My report",
+      "referral": "Invite a friend — get 7 free days"
     }
   }
 }
