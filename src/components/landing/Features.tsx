@@ -1,17 +1,20 @@
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import { ArrowRight } from "lucide-react";
 
-const features = [
-  { icon: "🔮", title: "Таро", desc: "Расклады на день, ситуацию, кельтский крест" },
-  { icon: "🌙", title: "Сонник", desc: "AI толкование снов с разбором символов" },
-  { icon: "🔢", title: "Нумерология", desc: "Число судьбы, матрица Пифагора" },
-  { icon: "⭐", title: "Астрология", desc: "Персональный гороскоп, транзиты планет" },
-  { icon: "💑", title: "Совместимость", desc: "Анализ пары по всем системам" },
-  { icon: "ᚱ", title: "Руны", desc: "Расклады Elder Futhark с толкованием" },
-  { icon: "☯", title: "И-Цзин", desc: "Мудрость Книги Перемен" },
+const featureKeys = [
+  { icon: "🔮", key: "tarot" },
+  { icon: "🌙", key: "dreams" },
+  { icon: "🔢", key: "numerology" },
+  { icon: "⭐", key: "astrology" },
+  { icon: "💑", key: "compatibility" },
+  { icon: "ᚱ", key: "runes" },
+  { icon: "☯", key: "iching" },
 ];
 
 export const Features = () => {
+  const { t } = useTranslation();
+
   return (
     <section className="relative py-24 lg:py-32">
       <div className="container">
@@ -22,18 +25,14 @@ export const Features = () => {
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           className="text-center mb-16"
         >
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-            7 мистических практик
-          </h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Всё, что нужно для познания себя — в одном AI-помощнике
-          </p>
+          <h2 className="text-3xl sm:text-4xl font-bold mb-4">{t("features.title")}</h2>
+          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">{t("features.subtitle")}</p>
         </motion.div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {features.map((f, i) => (
+          {featureKeys.map((f, i) => (
             <motion.div
-              key={f.title}
+              key={f.key}
               initial={{ opacity: 0, y: 20, filter: "blur(4px)" }}
               whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
               viewport={{ once: true, amount: 0.2 }}
@@ -44,8 +43,8 @@ export const Features = () => {
               <div className="relative flex items-start justify-between">
                 <div className="space-y-3">
                   <span className="text-3xl">{f.icon}</span>
-                  <h3 className="text-xl font-semibold font-serif">{f.title}</h3>
-                  <p className="text-muted-foreground text-sm leading-relaxed">{f.desc}</p>
+                  <h3 className="text-xl font-semibold font-serif">{t(`features.${f.key}`)}</h3>
+                  <p className="text-muted-foreground text-sm leading-relaxed">{t(`features.${f.key}Desc`)}</p>
                 </div>
                 <ArrowRight className="w-5 h-5 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all duration-200 mt-1 shrink-0" />
               </div>

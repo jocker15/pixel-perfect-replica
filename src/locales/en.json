@@ -1,0 +1,74 @@
+{
+  "nav": {
+    "modules": "Modules",
+    "howItWorks": "How it works",
+    "pricing": "Pricing",
+    "start": "Start"
+  },
+  "hero": {
+    "title1": "Unlock the secrets of the stars and",
+    "title2": "discover your cosmic path",
+    "subtitle": "A wise AI esoteric with tarot, numerology, astrology and dream interpretation. 7 mystical practices in one place.",
+    "cta": "Start for free",
+    "telegram": "Open in Telegram",
+    "socialProof": "users trust the stars"
+  },
+  "features": {
+    "title": "7 mystical practices",
+    "subtitle": "Everything you need for self-discovery — in one AI assistant",
+    "tarot": "Tarot",
+    "tarotDesc": "Daily, situational, Celtic cross spreads",
+    "dreams": "Dream Book",
+    "dreamsDesc": "AI dream interpretation with symbol analysis",
+    "numerology": "Numerology",
+    "numerologyDesc": "Destiny number, Pythagorean matrix",
+    "astrology": "Astrology",
+    "astrologyDesc": "Personal horoscope, planetary transits",
+    "compatibility": "Compatibility",
+    "compatibilityDesc": "Couple analysis across all systems",
+    "runes": "Runes",
+    "runesDesc": "Elder Futhark spreads with interpretation",
+    "iching": "I Ching",
+    "ichingDesc": "Wisdom of the Book of Changes"
+  },
+  "howItWorks": {
+    "title": "How it works",
+    "subtitle": "Three simple steps to mystical knowledge",
+    "step": "Step",
+    "step1": "Ask a question",
+    "step1Desc": "By text or voice — the bot understands any phrasing",
+    "step2": "AI analyzes",
+    "step2Desc": "Knowledge base of 20,000+ interpretations and mystical systems",
+    "step3": "Get your answer",
+    "step3Desc": "Personalized mystical interpretation in detail"
+  },
+  "pricing": {
+    "title": "Choose your path",
+    "subtitle": "Start free, unlock more with Premium",
+    "popular": "Popular",
+    "free": "Free",
+    "freePrice": "$0",
+    "freePeriod": "forever",
+    "freeFeature1": "3 requests per day",
+    "freeFeature2": "All 7 modules",
+    "freeFeature3": "Voice input",
+    "freeFeature4": "Last 7 days history",
+    "freeCta": "Start for free",
+    "premium": "Premium",
+    "premiumPrice": "$4.99",
+    "premiumPeriod": "per month",
+    "premiumFeature1": "Unlimited requests",
+    "premiumFeature2": "Priority AI",
+    "premiumFeature3": "PDF reports",
+    "premiumFeature4": "Full history",
+    "premiumFeature5": "No ads",
+    "premiumCta": "Try for free"
+  },
+  "footer": {
+    "brand": "Tarot Dreambook",
+    "telegramBot": "Telegram bot",
+    "channel": "Channel",
+    "privacy": "Privacy Policy",
+    "copyright": "© 2026 Tarot Dreambook — AI Esoteric"
+  }
+}
