@@ -3,8 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Sparkles, Menu, X } from "lucide-react";
-import { LanguageSwitcher } from "./LanguageSwitcher";
+import { Zap, Menu, X } from "lucide-react";
 
 export const Navbar = () => {
   const [open, setOpen] = useState(false);
@@ -12,17 +11,18 @@ export const Navbar = () => {
   const navigate = useNavigate();
 
   const links = [
-    { label: t("nav.modules"), href: "#features" },
-    { label: t("nav.howItWorks"), href: "#how" },
+    { label: t("nav.solutions"), href: "#how" },
+    { label: t("nav.howItWorks"), href: "#modules" },
     { label: t("nav.pricing"), href: "#pricing" },
+    { label: t("nav.contact"), href: "#contact" },
   ];
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/50">
       <div className="container flex items-center justify-between h-16">
         <a href="/" className="flex items-center gap-2">
-          <Sparkles className="w-5 h-5 text-primary" />
-          <span className="font-serif font-semibold text-lg">{t("footer.brand")}</span>
+          <Zap className="w-5 h-5 text-primary" />
+          <span className="font-semibold text-lg">{t("footer.brand")}</span>
         </a>
 
         <div className="hidden md:flex items-center gap-8">
@@ -31,12 +31,10 @@ export const Navbar = () => {
               {l.label}
             </a>
           ))}
-          <LanguageSwitcher />
-          <Button variant="hero" size="sm" onClick={() => navigate("/login")}>{t("nav.start")}</Button>
+          <Button variant="hero" size="sm" onClick={() => navigate("/login")}>{t("nav.tryFree")}</Button>
         </div>
 
         <div className="flex md:hidden items-center gap-2">
-          <LanguageSwitcher />
           <button
             onClick={() => setOpen(!open)}
             className="p-2 text-muted-foreground hover:text-foreground transition-colors"
@@ -65,7 +63,7 @@ export const Navbar = () => {
                   {l.label}
                 </a>
               ))}
-              <Button variant="hero" size="sm" className="w-full mt-2">{t("nav.start")}</Button>
+              <Button variant="hero" size="sm" className="w-full mt-2" onClick={() => navigate("/login")}>{t("nav.tryFree")}</Button>
             </div>
           </motion.div>
         )}

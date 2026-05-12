@@ -1,41 +1,24 @@
 import { Navbar } from "@/components/landing/Navbar";
 import { Hero } from "@/components/landing/Hero";
-import { Features } from "@/components/landing/Features";
+import { PainPoints } from "@/components/landing/PainPoints";
 import { HowItWorks } from "@/components/landing/HowItWorks";
-import { CompatibilityChecker } from "@/components/landing/CompatibilityChecker";
-import { Testimonials } from "@/components/landing/Testimonials";
+import { Modules } from "@/components/landing/Modules";
 import { Pricing } from "@/components/landing/Pricing";
+import { Testimonials } from "@/components/landing/Testimonials";
+import { FAQ } from "@/components/landing/FAQ";
 import { Footer } from "@/components/landing/Footer";
-import { StarryBackground } from "@/components/landing/StarryBackground";
-import { FloatingZodiac } from "@/components/landing/FloatingZodiac";
-import { ZodiacWheel } from "@/components/landing/ZodiacWheel";
-import { FlyingPlanets } from "@/components/landing/FlyingPlanets";
 
-const Index = () => {
-  return (
-    <div className="min-h-screen relative">
-      <StarryBackground />
-      <FloatingZodiac />
-      <ZodiacWheel />
-      <FlyingPlanets />
-      <div className="relative z-10">
-        <Navbar />
-        <Hero />
-        <div id="features">
-          <Features />
-        </div>
-        <div id="how">
-          <HowItWorks />
-        </div>
-        <CompatibilityChecker />
-        <Testimonials />
-        <div id="pricing">
-          <Pricing />
-        </div>
-        <Footer />
-      </div>
-    </div>
-  );
-};
-
+const Index = () => (
+  <div className="min-h-screen bg-background text-foreground">
+    <Navbar />
+    <Hero />
+    <div id="painpoints"><PainPoints /></div>
+    <div id="how"><HowItWorks /></div>
+    <div id="modules"><Modules /></div>
+    <div id="pricing"><Pricing /></div>
+    <Testimonials />
+    <FAQ />
+    <div id="contact"><Footer /></div>
+  </div>
+);
 export default Index;
